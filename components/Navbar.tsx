@@ -43,10 +43,12 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }: NavbarProps) {
             <div className="inline-flex items-center gap-2 hover:cursor-pointer">
               <Avatar
                 isBordered
-                size="sm"
-                color="secondary"
                 showFallback
+                size="sm"
                 src="https://images.unsplash.com/broken"
+                classNames={{
+                  base: "bg-emerald-600 text-white ring-emerald-600",
+                }}
               />
 
               <div className="-space-y-1">
