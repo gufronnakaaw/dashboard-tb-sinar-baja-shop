@@ -3,9 +3,9 @@ import Layout from "@/components/wrapper/Layout";
 
 export default function TransactionsPage() {
   return (
-    <Layout title="Transactions Page">
+    <Layout title="Products Page">
       <Container>
-        <section>Transactions page</section>
+        <section>products page</section>
       </Container>
     </Layout>
   );
