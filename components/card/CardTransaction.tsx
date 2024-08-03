@@ -12,7 +12,7 @@ export default function CardTransaction() {
 
       <div className="justify-self-start">
         <Link
-          href="#"
+          href="/transactions/190720240901"
           className="text-sm font-semibold text-foreground hover:text-emerald-600"
         >
           Transaksi #190720240901
