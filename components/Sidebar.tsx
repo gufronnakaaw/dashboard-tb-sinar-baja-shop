@@ -1,5 +1,11 @@
 import ButtonSidebar from "@/components/button/ButtonSidebar";
-import { Alarm, ArchiveBox, House, MoneyWavy } from "@phosphor-icons/react";
+import {
+  Alarm,
+  ArchiveBox,
+  House,
+  ListBullets,
+  MoneyWavy,
+} from "@phosphor-icons/react";
 import { Image } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
@@ -35,6 +41,12 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
             label="Produk"
             path="/products"
             icon={<ArchiveBox weight="bold" size={20} />}
+          />
+
+          <ButtonSidebar
+            label="Kategori"
+            path="/categories"
+            icon={<ListBullets weight="bold" size={20} />}
           />
 
           <ButtonSidebar
