@@ -1,3 +1,4 @@
+import { formatInputRupiah } from "@/utils/formatInputRupiah";
 import {
   Button,
   Input,
@@ -9,9 +10,16 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { Check } from "@phosphor-icons/react";
+import { useState } from "react";
 
 export default function PopupShippingCost() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [value, setValue] = useState<string>("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    setValue(formatInputRupiah(rawValue));
+  };
 
   return (
     <>
@@ -44,7 +52,9 @@ export default function PopupShippingCost() {
                   variant="flat"
                   color="default"
                   labelPlacement="outside"
-                  placeholder="Cth: 50000"
+                  placeholder="Cth: 50.000"
+                  value={value}
+                  onChange={handleChange}
                   startContent={
                     <span className="text-sm font-medium text-foreground-600">
                       Rp
