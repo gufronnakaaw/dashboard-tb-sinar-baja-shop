@@ -12,7 +12,7 @@ export default function TransactionsPage() {
         <section className="mb-8 grid gap-8">
           <div className="grid gap-0.5">
             <h1 className="text-[22px] font-semibold text-foreground">
-              Atur transaksi kamu 📦
+              Atur transaksi kamu 💸
             </h1>
             <p className="text-foreground-600">
               Pantau semua transakti yang masuk disini.
