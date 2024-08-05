@@ -10,9 +10,9 @@ export type DeliveryType = {
 
 export const sorting: SortingType[] = [
   { key: "newest", label: "Terbaru" },
-  { key: "latest", label: "Terlama" },
-  { key: "high_price", label: "Harga Tertinggi" },
-  { key: "low_price", label: "Harga Terendah" },
+  { key: "not_yet_paid", label: "Belum Bayar" },
+  { key: "already_paid", label: "Sudah Bayar" },
+  { key: "done", label: "Selesai" },
 ];
 
 export const delivery: DeliveryType[] = [
