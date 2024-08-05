@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function CardTransaction() {
   return (
-    <div className="grid grid-cols-[2rem_1fr_max-content_repeat(3,160px)_max-content] items-center justify-items-center gap-4 rounded-xl border border-foreground-200 p-6 transition-all hover:border-emerald-600">
+    <div className="grid grid-cols-[2rem_1fr_repeat(2,160px)_230px_105px] items-center justify-items-center gap-4 rounded-xl border border-foreground-200 p-6 transition-all hover:border-emerald-600">
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground-200 font-semibold text-foreground-600">
         1
       </div>
@@ -21,8 +21,6 @@ export default function CardTransaction() {
           Fajar Fadillah Agustian
         </p>
       </div>
-
-      <div className="text-sm text-foreground">320 item</div>
 
       <div className="text-sm text-foreground">{formatRupiah(43509182)}</div>
 
@@ -40,7 +38,9 @@ export default function CardTransaction() {
         Ambil Sendiri
       </Chip>
 
-      <div className="text-sm text-foreground">20 Juli 2024, 10:00 WIB</div>
+      <div className="text-sm text-foreground">
+        31 September 2024, 10:00 WIB
+      </div>
 
       <Chip
         variant="flat"

@@ -9,7 +9,7 @@ export default function TransactionsPage() {
   return (
     <Layout title="Transactions Page">
       <Container>
-        <section className="grid gap-8">
+        <section className="mb-8 grid gap-8">
           <div className="grid gap-0.5">
             <h1 className="text-[22px] font-semibold text-foreground">
               Atur transaksi kamu 📦
