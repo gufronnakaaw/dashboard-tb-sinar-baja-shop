@@ -8,3 +8,17 @@
 ::selection {
   @apply bg-emerald-600 text-white;
 }
+
+/* react-quill custom css */
+.ql-toolbar {
+  @apply rounded-t-xl border-foreground-200;
+}
+.ql-toolbar.ql-snow {
+  @apply font-sans;
+}
+.ql-container {
+  @apply rounded-b-xl border-foreground-200;
+}
+.ql-editor {
+  @apply font-sans text-sm;
+}

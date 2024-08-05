@@ -25,9 +25,12 @@ import {
   XCircle,
 } from "@phosphor-icons/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
 
 export default function TransactionsPage() {
+  const router = useRouter();
+
   const columnsProduk = [
     { name: "Gambar Product", uid: "gambar_produk" },
     { name: "Nama Produk", uid: "nama_produk" },
@@ -99,6 +102,7 @@ export default function TransactionsPage() {
               <PencilLine
                 weight="bold"
                 size={20}
+                onClick={() => router.push(`/products/edit/${product.id}`)}
                 className="text-foreground-600"
               />
             </Button>
