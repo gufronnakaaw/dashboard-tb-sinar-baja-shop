@@ -17,6 +17,8 @@ export default function EditPage() {
     }
   }, [isMounted]);
 
+  console.log(editorContent);
+
   return (
     <Layout title="Edit Product Page">
       <Container>
@@ -49,6 +51,7 @@ export default function EditPage() {
                     weight="bold"
                     size={56}
                     className="text-foreground-600"
+                    alt="preview product"
                   />
                 </div>
               </div>
@@ -79,6 +82,7 @@ export default function EditPage() {
           </div>
         </section>
       </Container>
+      {<div dangerouslySetInnerHTML={{ __html: editorContent }}></div>}
     </Layout>
   );
 }

@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
               <div className="grid gap-1 pl-24">
                 <p className="text-sm font-medium text-foreground-600">
-                  Pengiriman "Diantar"
+                  Pengiriman Diantar
                 </p>
                 <h6 className="text-[32px] font-semibold text-foreground">
                   28
