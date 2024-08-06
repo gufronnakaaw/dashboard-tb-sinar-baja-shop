@@ -208,32 +208,34 @@ export default function TransactionsPage() {
               }}
             />
 
-            <Table
-              isHeaderSticky
-              aria-label="products table"
-              color="primary"
-              selectionMode="none"
-              classNames={customStyleTable}
-              className="scrollbar-hide"
-            >
-              <TableHeader columns={columnsProduk}>
-                {(column) => (
-                  <TableColumn key={column.uid}>{column.name}</TableColumn>
-                )}
-              </TableHeader>
+            <div className="overflow-x-scroll scrollbar-hide">
+              <Table
+                isHeaderSticky
+                aria-label="products table"
+                color="primary"
+                selectionMode="none"
+                classNames={customStyleTable}
+                className="scrollbar-hide"
+              >
+                <TableHeader columns={columnsProduk}>
+                  {(column) => (
+                    <TableColumn key={column.uid}>{column.name}</TableColumn>
+                  )}
+                </TableHeader>
 
-              <TableBody items={data?.data.products}>
-                {(item) => (
-                  <TableRow key={item.kode_item}>
-                    {(columnKey) => (
-                      <TableCell>
-                        {renderCellProduct(item, columnKey)}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                <TableBody items={data?.data.products}>
+                  {(item) => (
+                    <TableRow key={item.kode_item}>
+                      {(columnKey) => (
+                        <TableCell>
+                          {renderCellProduct(item, columnKey)}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
 
             <Pagination
               isCompact
