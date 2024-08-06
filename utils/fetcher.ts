@@ -5,6 +5,7 @@ type FetcherParams = {
   method: "GET" | "POST" | "PATCH" | "DELETE";
   data?: unknown;
   token?: string;
+  file?: boolean;
 };
 
 export async function clientFetcher({
@@ -12,6 +13,7 @@ export async function clientFetcher({
   method,
   data,
   token,
+  file,
 }: FetcherParams) {
   const options = {
     url: `https://api.sinarbajakediri.my.id/api` + url,
@@ -20,6 +22,14 @@ export async function clientFetcher({
 
   if (data) {
     Object.assign(options, { data });
+  }
+
+  if (file) {
+    Object.assign(options, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 
   if (token) {

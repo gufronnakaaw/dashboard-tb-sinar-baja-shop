@@ -25,6 +25,7 @@ export default function BannerPage() {
                     weight="bold"
                     size={56}
                     className="text-foreground-600"
+                    alt="preview banner"
                   />
                 </div>
               </div>

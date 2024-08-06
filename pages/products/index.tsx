@@ -1,10 +1,11 @@
-import { products } from "@/_dummy/products";
 import CustomTooltip from "@/components/Tooltip";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
-import usePagination from "@/hooks/usepagination";
-import { ProductType } from "@/types/product.type";
+import { SuccessResponse } from "@/types/global.type";
+import { DashboardProduct } from "@/types/product.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { formatDate } from "@/utils/formatDate";
+import { formatRupiah } from "@/utils/formatRupiah";
 import {
   Button,
   Input,
@@ -25,31 +26,44 @@ import {
   XCircle,
 } from "@phosphor-icons/react";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
+import useSWR from "swr";
 
 export default function TransactionsPage() {
-  const router = useRouter();
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useSWR<
+    SuccessResponse<{
+      products: DashboardProduct[];
+      total_items: number;
+      last_synchronized: string;
+    }>
+  >({ url: `/dashboard/products?page=${page}`, method: "GET" });
 
   const columnsProduk = [
     { name: "Gambar Product", uid: "gambar_produk" },
+    { name: "Kode Item", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Kategori", uid: "kategori" },
-    { name: "Deskripsi Produk", uid: "deskripsi_produk" },
+    { name: "Deskripsi", uid: "deskripsi_produk" },
+    { name: "Harga", uid: "harga" },
+    { name: "Total Stok", uid: "total_stok" },
     { name: "Aksi", uid: "action" },
   ];
 
-  const { page, pages, data, setPage } = usePagination(products, 10);
-
-  function renderCellProduct(product: ProductType, columnKey: React.Key) {
-    const cellValue = product[columnKey as keyof ProductType];
+  function renderCellProduct(
+    product: DashboardProduct | undefined,
+    columnKey: React.Key,
+  ) {
+    const cellValue = product
+      ? product[columnKey as keyof DashboardProduct]
+      : null;
 
     switch (columnKey) {
       case "gambar_produk":
-        return product.image ? (
+        return product?.image.length ? (
           <Image
             priority
-            src={`${product.image}`}
+            src={`${product.image[0].url}`}
             alt="product img"
             width={500}
             height={500}
@@ -67,20 +81,26 @@ export default function TransactionsPage() {
       case "nama_produk":
         return (
           <CustomTooltip
-            content={product.name}
+            content={product?.nama_produk_asli}
             classNames={{
               content: "max-w-[300px] font-medium",
             }}
           >
             <div className="line-clamp-1 w-max max-w-[400px] text-foreground">
-              {product.name}
+              {product?.nama_produk_asli}
             </div>
           </CustomTooltip>
         );
+      case "kode_item":
+        return (
+          <div className="line-clamp-1 w-max max-w-[400px] text-foreground">
+            {product?.kode_item}
+          </div>
+        );
       case "kategori":
-        return <div className="w-max text-foreground">{product.category}</div>;
+        return <div className="w-max text-foreground">{product?.kategori}</div>;
       case "deskripsi_produk":
-        return !product.description ? (
+        return !product?.deskripsi ? (
           <CustomTooltip
             placement="top"
             content="Deskripsi produk belum ada ❌"
@@ -95,14 +115,31 @@ export default function TransactionsPage() {
             <SealCheck weight="fill" size={20} className="text-emerald-600" />
           </CustomTooltip>
         );
+      case "harga":
+        return (
+          <div className="w-max text-foreground">
+            {formatRupiah(product?.harga_6 as number)}
+          </div>
+        );
+      case "total_stok":
+        return (
+          <div className="w-max text-foreground">{product?.total_stok}</div>
+        );
       case "action":
         return (
           <CustomTooltip content="Edit">
-            <Button isIconOnly variant="light" color="default" size="sm">
+            <Button
+              isIconOnly
+              variant="light"
+              color="default"
+              size="sm"
+              onClick={() =>
+                window.open(`/products/edit/${product?.slug}`, "_blank")
+              }
+            >
               <PencilLine
                 weight="bold"
                 size={20}
-                onClick={() => router.push(`/products/edit/${product.id}`)}
                 className="text-foreground-600"
               />
             </Button>
@@ -112,6 +149,10 @@ export default function TransactionsPage() {
       default:
         return cellValue;
     }
+  }
+
+  if (isLoading) {
+    return;
   }
 
   return (
@@ -130,7 +171,7 @@ export default function TransactionsPage() {
               <div className="text-[12px] leading-snug">
                 <p className="text-foreground-600">Sinkron terakhir :</p>
                 <p className="font-medium text-foreground">
-                  04 Agustus 2024, 10:00 WIB
+                  {formatDate(data?.data.last_synchronized as string)}
                 </p>
               </div>
 
@@ -181,9 +222,9 @@ export default function TransactionsPage() {
                 )}
               </TableHeader>
 
-              <TableBody items={data}>
+              <TableBody items={data?.data.products}>
                 {(item) => (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.kode_item}>
                     {(columnKey) => (
                       <TableCell>
                         {renderCellProduct(item, columnKey)}
@@ -198,7 +239,9 @@ export default function TransactionsPage() {
               isCompact
               showControls
               page={page}
-              total={pages}
+              total={Math.ceil(
+                ((data?.data.total_items as number) / 10) as number,
+              )}
               onChange={setPage}
               className="justify-self-center"
               classNames={{
