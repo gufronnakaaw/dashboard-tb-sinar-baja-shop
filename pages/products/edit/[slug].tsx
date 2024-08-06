@@ -5,6 +5,7 @@ import { SuccessResponse } from "@/types/global.type";
 import { DashboardProduct } from "@/types/product.type";
 import { convertCodeItem } from "@/utils/convertCodeItem";
 import getCroppedImg from "@/utils/cropImage";
+import { decodeHtmlEntities } from "@/utils/decodeHtml";
 import { clientFetcher, serverFetcher } from "@/utils/fetcher";
 import { Button } from "@nextui-org/react";
 import { ArrowLeft, FloppyDisk } from "@phosphor-icons/react";
@@ -17,7 +18,7 @@ export default function EditPage({
   product,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [editorContent, setEditorContent] = useState<string>(
-    !product.deskripsi ? "" : product.deskripsi,
+    !product.deskripsi ? "" : decodeHtmlEntities(product.deskripsi),
   );
   const [isMounted, setIsMounted] = useState(false);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -39,13 +40,15 @@ export default function EditPage({
 
   async function handleUpload() {
     try {
-      const croppedImage = await getCroppedImg(file, croppedAreaPixels);
-
-      const response = await fetch(croppedImage as string);
-      const blob = await response.blob();
-
       const formData = new FormData();
-      if (file != product.image[0].url) {
+      if (file == product.image[0]?.url) {
+        formData.append("product", "");
+      } else {
+        const croppedImage = await getCroppedImg(file, croppedAreaPixels);
+
+        const response = await fetch(croppedImage as string);
+        const blob = await response.blob();
+
         const fileConvert = new File(
           [blob],
           `${convertCodeItem(product.kode_item)}.jpg`,
@@ -73,7 +76,7 @@ export default function EditPage({
         window.close();
       }, 1000);
     } catch (e) {
-      Toast.success("Gagal berhasil");
+      Toast.error("Edit gagal");
       console.error(e);
     }
   }
