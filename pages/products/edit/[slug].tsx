@@ -39,13 +39,15 @@ export default function EditPage({
 
   async function handleUpload() {
     try {
-      const croppedImage = await getCroppedImg(file, croppedAreaPixels);
-
-      const response = await fetch(croppedImage as string);
-      const blob = await response.blob();
-
       const formData = new FormData();
-      if (file != product.image[0].url) {
+      if (file == product.image[0]?.url) {
+        formData.append("product", "");
+      } else {
+        const croppedImage = await getCroppedImg(file, croppedAreaPixels);
+
+        const response = await fetch(croppedImage as string);
+        const blob = await response.blob();
+
         const fileConvert = new File(
           [blob],
           `${convertCodeItem(product.kode_item)}.jpg`,
@@ -73,7 +75,7 @@ export default function EditPage({
         window.close();
       }, 1000);
     } catch (e) {
-      Toast.success("Gagal berhasil");
+      Toast.error("Edit gagal");
       console.error(e);
     }
   }
