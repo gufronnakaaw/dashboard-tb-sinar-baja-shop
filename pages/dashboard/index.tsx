@@ -9,15 +9,13 @@ export default function DashboardPage() {
     <Layout title="Dashboard Page">
       <Container>
         <section className="grid gap-8">
-          <div className="flex items-end justify-between gap-2">
-            <div className="grid gap-0.5">
-              <h1 className="text-[22px] font-semibold text-foreground">
-                Selamat Datang 👋, Admin
-              </h1>
-              <p className="text-foreground-600">
-                Berikut rangkuman tokomu hari ini.
-              </p>
-            </div>
+          <div className="grid gap-0.5">
+            <h1 className="text-[22px] font-semibold text-foreground">
+              Selamat Datang 👋, Admin
+            </h1>
+            <p className="text-foreground-600">
+              Berikut rangkuman tokomu hari ini.
+            </p>
           </div>
 
           <div className="grid gap-6 rounded-xl border-[2px] border-foreground-200 px-16 py-6">
