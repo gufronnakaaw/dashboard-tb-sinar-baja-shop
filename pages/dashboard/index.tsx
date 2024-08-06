@@ -1,8 +1,7 @@
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { Button } from "@nextui-org/react";
-import { ArrowRight, ArrowsCounterClockwise } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -10,35 +9,13 @@ export default function DashboardPage() {
     <Layout title="Dashboard Page">
       <Container>
         <section className="grid gap-8">
-          <div className="flex items-end justify-between gap-2">
-            <div className="grid gap-0.5">
-              <h1 className="text-[22px] font-semibold text-foreground">
-                Selamat Datang 👋, Admin
-              </h1>
-              <p className="text-foreground-600">
-                Berikut rangkuman tokomu hari ini.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="text-[12px] leading-snug">
-                <p className="text-foreground-600">Sinkron terakhir :</p>
-                <p className="font-medium text-foreground">
-                  04 Agustus 2024, 10:00 WIB
-                </p>
-              </div>
-
-              <Button
-                variant="solid"
-                size="sm"
-                startContent={
-                  <ArrowsCounterClockwise weight="bold" size={16} />
-                }
-                className="bg-emerald-600 font-medium text-white"
-              >
-                Sinkron Data
-              </Button>
-            </div>
+          <div className="grid gap-0.5">
+            <h1 className="text-[22px] font-semibold text-foreground">
+              Selamat Datang 👋, Admin
+            </h1>
+            <p className="text-foreground-600">
+              Berikut rangkuman tokomu hari ini.
+            </p>
           </div>
 
           <div className="grid gap-6 rounded-xl border-[2px] border-foreground-200 px-16 py-6">

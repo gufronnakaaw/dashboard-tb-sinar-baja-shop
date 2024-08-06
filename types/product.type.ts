@@ -5,3 +5,10 @@ export type ProductType = {
   category: string;
   description: boolean;
 };
+
+export type ProductCategoryType = {
+  id_kategori: string;
+  nama: string;
+  created_at: string;
+  updated_at?: string;
+};
