@@ -25,11 +25,14 @@ import {
   SealCheck,
   XCircle,
 } from "@phosphor-icons/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import React, { useState } from "react";
 import useSWR from "swr";
 
-export default function ProductsPage() {
+export default function ProductsPage({
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [page, setPage] = useState(1);
   const { data, isLoading } = useSWR<
     SuccessResponse<{
@@ -37,7 +40,7 @@ export default function ProductsPage() {
       total_items: number;
       last_synchronized: string;
     }>
-  >({ url: `/dashboard/products?page=${page}`, method: "GET" });
+  >({ url: `/dashboard/products?page=${page}`, method: "GET", token });
 
   const columnsProduk = [
     { name: "Gambar Produk", uid: "gambar_produk" },
@@ -254,3 +257,11 @@ export default function ProductsPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async ({ req }) => {
+  return {
+    props: {
+      token: req.headers["access_token"] as string,
+    },
+  };
+}) satisfies GetServerSideProps<{ token: string }>;

@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import { clientFetcher } from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 import { NextUIProvider } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
@@ -13,7 +13,7 @@ export default function App({
   return (
     <NextUIProvider>
       <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <SWRConfig value={{ fetcher: clientFetcher }}>
+        <SWRConfig value={{ fetcher: fetcher }}>
           <Toaster position="top-right" />
           <Component {...pageProps} />
         </SWRConfig>

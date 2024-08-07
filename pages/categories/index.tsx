@@ -4,7 +4,7 @@ import Layout from "@/components/wrapper/Layout";
 import { SuccessResponse } from "@/types/global.type";
 import { ProductCategoryType } from "@/types/product.type";
 import { customStyleTable } from "@/utils/customStyleTable";
-import { clientFetcher } from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import {
   Button,
@@ -16,11 +16,14 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { ArrowsCounterClockwise } from "@phosphor-icons/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useState } from "react";
 import Toast from "react-hot-toast";
 import useSWR from "swr";
 
-export default function CategoriesPage() {
+export default function CategoriesPage({
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [loadingSync, setLoadingSync] = useState(false);
 
   const { data, isLoading, mutate } = useSWR<
@@ -28,7 +31,7 @@ export default function CategoriesPage() {
       categories: ProductCategoryType[];
       last_synchronized: string;
     }>
-  >({ url: "/dashboard/categories", method: "GET" });
+  >({ url: "/dashboard/categories", method: "GET", token });
 
   const columnsKategori = [
     { name: "Nama", uid: "nama" },
@@ -60,9 +63,10 @@ export default function CategoriesPage() {
     setLoadingSync(true);
 
     try {
-      await clientFetcher({
+      await fetcher({
         url: "/dashboard/sync/categories",
         method: "POST",
+        token,
       });
 
       Toast.success("Sinkron kategori berhasil");
@@ -154,3 +158,11 @@ export default function CategoriesPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async ({ req }) => {
+  return {
+    props: {
+      token: req.headers["access_token"] as string,
+    },
+  };
+}) satisfies GetServerSideProps<{ token: string }>;

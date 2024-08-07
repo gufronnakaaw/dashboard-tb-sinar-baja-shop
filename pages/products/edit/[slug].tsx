@@ -6,7 +6,7 @@ import { DashboardProduct } from "@/types/product.type";
 import { convertCodeItem } from "@/utils/convertCodeItem";
 import getCroppedImg from "@/utils/cropImage";
 import { decodeHtmlEntities } from "@/utils/decodeHtml";
-import { clientFetcher, serverFetcher } from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 import { Button } from "@nextui-org/react";
 import { ArrowLeft, FloppyDisk } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -16,6 +16,7 @@ import Toast from "react-hot-toast";
 
 export default function EditPage({
   product,
+  token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [editorContent, setEditorContent] = useState<string>(
     !product.deskripsi ? "" : decodeHtmlEntities(product.deskripsi),
@@ -61,11 +62,12 @@ export default function EditPage({
       formData.append("kode_item", product.kode_item);
       formData.append("deskripsi", editorContent);
 
-      await clientFetcher({
+      await fetcher({
         url: "/dashboard/products/image",
         method: "POST",
         file: true,
         data: formData,
+        token,
       });
 
       Toast.success("Edit berhasil");
@@ -176,15 +178,18 @@ export default function EditPage({
   );
 }
 
-export const getServerSideProps = (async ({ params }) => {
-  const response: SuccessResponse<DashboardProduct> = await serverFetcher({
+export const getServerSideProps = (async ({ params, req }) => {
+  const token = req.headers["access_token"] as string;
+  const response: SuccessResponse<DashboardProduct> = await fetcher({
     url: `/dashboard/products/${params?.slug}`,
     method: "GET",
+    token,
   });
 
   return {
     props: {
       product: response.data,
+      token,
     },
   };
-}) satisfies GetServerSideProps<{ product: DashboardProduct }>;
+}) satisfies GetServerSideProps<{ product: DashboardProduct; token: string }>;
