@@ -1,14 +1,13 @@
-import { categories } from "@/_dummy/categories";
+import LoadingSync from "@/components/LoadingSync";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
-import usePagination from "@/hooks/usepagination";
+import { SuccessResponse } from "@/types/global.type";
 import { ProductCategoryType } from "@/types/product.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { clientFetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import {
   Button,
-  Input,
-  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -16,17 +15,25 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { ArrowsCounterClockwise, MagnifyingGlass } from "@phosphor-icons/react";
-import React from "react";
+import { ArrowsCounterClockwise } from "@phosphor-icons/react";
+import React, { useState } from "react";
+import Toast from "react-hot-toast";
+import useSWR from "swr";
 
 export default function CategoriesPage() {
-  const columnsKategori = [
-    { name: "Kode", uid: "kode" },
-    { name: "Nama", uid: "nama" },
-    { name: "Dibuat Pada", uid: "created_at" },
-  ];
+  const [loadingSync, setLoadingSync] = useState(false);
 
-  const { page, pages, data, setPage } = usePagination(categories, 10);
+  const { data, isLoading, mutate } = useSWR<
+    SuccessResponse<{
+      categories: ProductCategoryType[];
+      last_synchronized: string;
+    }>
+  >({ url: "/dashboard/categories", method: "GET" });
+
+  const columnsKategori = [
+    { name: "Nama", uid: "nama" },
+    { name: "Disinkron Pada", uid: "updated_at" },
+  ];
 
   function renderCellCategory(
     category: ProductCategoryType,
@@ -35,14 +42,12 @@ export default function CategoriesPage() {
     const cellValue = category[columnKey as keyof ProductCategoryType];
 
     switch (columnKey) {
-      case "kode":
-        return <div className="text-foreground">{category.id_kategori}</div>;
       case "nama":
         return <div className="w-max text-foreground">{category.nama}</div>;
-      case "created_at":
+      case "updated_at":
         return (
           <div className="w-max text-foreground">
-            {formatDate(category.created_at)}
+            {formatDate(category.updated_at)}
           </div>
         );
 
@@ -51,9 +56,34 @@ export default function CategoriesPage() {
     }
   }
 
+  async function handleSyncCategories() {
+    setLoadingSync(true);
+
+    try {
+      await clientFetcher({
+        url: "/dashboard/sync/categories",
+        method: "POST",
+      });
+
+      Toast.success("Sinkron kategori berhasil");
+      mutate();
+      setLoadingSync(false);
+    } catch (error) {
+      setLoadingSync(false);
+      Toast.error("Sinkron kategori gagal");
+      console.log(error);
+    }
+  }
+
+  if (isLoading) {
+    return;
+  }
+
   return (
     <Layout title="Categories Page">
       <Container>
+        {loadingSync ? <LoadingSync /> : null}
+
         <section className="grid gap-8">
           <div className="flex items-end justify-between gap-2">
             <div className="grid gap-0.5">
@@ -69,7 +99,7 @@ export default function CategoriesPage() {
               <div className="text-[12px] leading-snug">
                 <p className="text-foreground-600">Sinkron terakhir :</p>
                 <p className="font-medium text-foreground">
-                  04 Agustus 2024, 10:00 WIB
+                  {formatDate(data?.data.last_synchronized as string)}
                 </p>
               </div>
 
@@ -80,6 +110,7 @@ export default function CategoriesPage() {
                   <ArrowsCounterClockwise weight="bold" size={16} />
                 }
                 className="bg-emerald-600 font-medium text-white"
+                onClick={handleSyncCategories}
               >
                 Sinkron Kategori
               </Button>
@@ -87,25 +118,6 @@ export default function CategoriesPage() {
           </div>
 
           <div className="grid gap-4">
-            <Input
-              type="text"
-              variant="flat"
-              color="default"
-              labelPlacement="outside"
-              placeholder="Cari kategori..."
-              startContent={
-                <MagnifyingGlass
-                  weight="bold"
-                  size={20}
-                  className="text-foreground-400"
-                />
-              }
-              classNames={{
-                base: "max-w-[450px]",
-                input: "text-sm placeholder:text-sm",
-              }}
-            />
-
             <Table
               isHeaderSticky
               aria-label="products categories table"
@@ -120,9 +132,13 @@ export default function CategoriesPage() {
                 )}
               </TableHeader>
 
-              <TableBody items={data}>
+              <TableBody
+                items={
+                  !data?.data.categories.length ? [] : data?.data.categories
+                }
+              >
                 {(item) => (
-                  <TableRow key={item.id_kategori}>
+                  <TableRow key={item.nama}>
                     {(columnKey) => (
                       <TableCell>
                         {renderCellCategory(item, columnKey)}
@@ -132,18 +148,6 @@ export default function CategoriesPage() {
                 )}
               </TableBody>
             </Table>
-
-            <Pagination
-              isCompact
-              showControls
-              page={page}
-              total={pages}
-              onChange={setPage}
-              className="justify-self-center"
-              classNames={{
-                cursor: "bg-emerald-600 text-white",
-              }}
-            />
           </div>
         </section>
       </Container>
