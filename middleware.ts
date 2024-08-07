@@ -1,5 +1,4 @@
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
@@ -22,16 +21,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  const requestForNextAuth = {
-    headers: {
-      cookie: request.headers.get("cookie") ?? undefined,
-    },
-  };
-
-  const session = await getSession({ req: requestForNextAuth });
   const response = NextResponse.next();
 
-  response.headers.set("access_token", session?.user.access_token as string);
+  response.headers.set("access_token", token.access_token);
 
   return response;
 }
