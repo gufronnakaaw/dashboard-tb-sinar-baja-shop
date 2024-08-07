@@ -17,8 +17,7 @@ export type DashboardProduct = {
   deskripsi: string;
 };
 export type ProductCategoryType = {
-  id_kategori: string;
   nama: string;
   created_at: string;
-  updated_at?: string;
+  updated_at: string;
 };
