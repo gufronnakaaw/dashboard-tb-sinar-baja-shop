@@ -29,7 +29,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import useSWR from "swr";
 
-export default function TransactionsPage() {
+export default function ProductsPage() {
   const [page, setPage] = useState(1);
   const { data, isLoading } = useSWR<
     SuccessResponse<{
@@ -40,8 +40,8 @@ export default function TransactionsPage() {
   >({ url: `/dashboard/products?page=${page}`, method: "GET" });
 
   const columnsProduk = [
-    { name: "Gambar Product", uid: "gambar_produk" },
-    { name: "Kode Item", uid: "kode_item" },
+    { name: "Gambar Produk", uid: "gambar_produk" },
+    { name: "Kode Produk", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Kategori", uid: "kategori" },
     { name: "Deskripsi", uid: "deskripsi_produk" },
@@ -78,24 +78,22 @@ export default function TransactionsPage() {
             />
           </div>
         );
+      case "kode_item":
+        return (
+          <div className="w-max text-foreground">{product?.kode_item}</div>
+        );
       case "nama_produk":
         return (
           <CustomTooltip
             content={product?.nama_produk_asli}
             classNames={{
-              content: "max-w-[300px] font-medium",
+              content: "max-w-[350px] font-medium",
             }}
           >
-            <div className="line-clamp-1 w-max max-w-[400px] text-foreground">
+            <div className="line-clamp-1 w-max max-w-[350px] text-foreground">
               {product?.nama_produk_asli}
             </div>
           </CustomTooltip>
-        );
-      case "kode_item":
-        return (
-          <div className="line-clamp-1 w-max max-w-[400px] text-foreground">
-            {product?.kode_item}
-          </div>
         );
       case "kategori":
         return <div className="w-max text-foreground">{product?.kategori}</div>;
