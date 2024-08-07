@@ -106,23 +106,25 @@ export default function EditPage({
           </div>
 
           <div className="grid gap-4">
-            <div className="aspect-square h-[300px] w-[300px] rounded-[20px] border-[4px] border-dashed border-foreground-200 p-2">
-              <div className="relative flex h-full w-full items-center justify-center rounded-xl bg-foreground-200">
-                <Cropper
-                  image={file as string}
-                  crop={crop}
-                  zoom={zoom}
-                  aspect={1 / 1}
-                  onCropChange={setCrop}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
+            <div className="inline-flex gap-2">
+              <div className="aspect-square h-[300px] w-[300px] rounded-[20px] border-[2px] border-dashed border-foreground-200 p-2">
+                <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-foreground-200">
+                  <Cropper
+                    image={file as string}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1 / 1}
+                    onCropChange={setCrop}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                  />
+                </div>
               </div>
-            </div>
 
-            <p className="mt-1.5 text-[12px] font-medium italic text-foreground-600">
-              * Preview Gambar Produk
-            </p>
+              <p className="mt-6 text-[12px] font-medium italic text-foreground-400">
+                * Preview Gambar Produk
+              </p>
+            </div>
 
             <div className="grid gap-1.5">
               <span className="inline-flex text-sm after:ml-[2px] after:text-danger after:content-['*']">
