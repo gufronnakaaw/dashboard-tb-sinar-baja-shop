@@ -20,7 +20,7 @@ export default function EditPage({
   const [editorContent, setEditorContent] = useState<string>(
     !product.deskripsi ? "" : decodeHtmlEntities(product.deskripsi),
   );
-  const [isMounted, setIsMounted] = useState(false);
+  const [client, setClient] = useState(false);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [file, setFile] = useState<string | ArrayBuffer | null>(
@@ -33,10 +33,8 @@ export default function EditPage({
   };
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      setIsMounted(true);
-    }
-  }, [isMounted]);
+    setClient(true);
+  }, []);
 
   async function handleUpload() {
     try {
@@ -79,6 +77,10 @@ export default function EditPage({
       Toast.error("Edit gagal");
       console.error(e);
     }
+  }
+
+  if (!client) {
+    return;
   }
 
   return (
