@@ -3,11 +3,12 @@ import {
   Alarm,
   ArchiveBox,
   House,
+  Image,
+  Link,
   ListBullets,
   MoneyWavy,
 } from "@phosphor-icons/react";
-import { Image } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
+import LinkNext from "next/link";
 
 interface SidebarProps {
   sidebarOpen?: boolean;
@@ -20,14 +21,14 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
         sidebarOpen ? "left-0" : "-left-full"
       }`}
     >
-      <Link
+      <LinkNext
         href="/"
         className="inline-flex w-max items-center gap-2 justify-self-end xl:justify-self-center"
       >
         <div className="h-6 w-6 rounded-full bg-emerald-600" />
 
         <div className="font-bold text-foreground">TB. SINAR BAJA</div>
-      </Link>
+      </LinkNext>
 
       <div className="flex flex-1 flex-col overflow-y-scroll scrollbar-hide">
         <div className="grid gap-1">
@@ -52,7 +53,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
           <ButtonSidebar
             label="Banner"
             path="/banner"
-            icon={<Image weight="bold" size={20} />}
+            icon={<Image weight="bold" size={20} alt="icon banner" />}
           />
 
           <ButtonSidebar
@@ -65,6 +66,12 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
             label="Operasional"
             path="/operational"
             icon={<Alarm weight="bold" size={20} />}
+          />
+
+          <ButtonSidebar
+            label="Pull"
+            path="/pulls"
+            icon={<Link weight="bold" size={20} />}
           />
         </div>
       </div>

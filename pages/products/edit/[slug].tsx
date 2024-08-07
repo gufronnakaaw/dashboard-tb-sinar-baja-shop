@@ -62,7 +62,7 @@ export default function EditPage({
       formData.append("deskripsi", editorContent);
 
       await clientFetcher({
-        url: "/products/image",
+        url: "/dashboard/products/image",
         method: "POST",
         file: true,
         data: formData,
