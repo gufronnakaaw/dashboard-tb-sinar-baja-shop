@@ -22,3 +22,14 @@
 .ql-editor {
   @apply font-sans text-sm;
 }
+
+@layer base {
+  ul,
+  ol {
+    list-style: revert;
+  }
+}
+
+.ck-editor {
+  @apply rounded-b-xl border-foreground-200;
+}

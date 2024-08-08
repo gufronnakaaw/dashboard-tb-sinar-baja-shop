@@ -1,25 +1,25 @@
-import EditorQuill from "@/components/EditorQuill";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { SuccessResponse } from "@/types/global.type";
 import { DashboardProduct } from "@/types/product.type";
 import { convertCodeItem } from "@/utils/convertCodeItem";
 import getCroppedImg from "@/utils/cropImage";
-import { decodeHtmlEntities } from "@/utils/decodeHtml";
 import { fetcher } from "@/utils/fetcher";
 import { Button } from "@nextui-org/react";
 import { ArrowLeft, FloppyDisk } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Cropper from "react-easy-crop";
 import Toast from "react-hot-toast";
+const EditorCK = dynamic(() => import("@/components/EditorCK"), { ssr: false });
 
 export default function EditPage({
   product,
   token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [editorContent, setEditorContent] = useState<string>(
-    !product.deskripsi ? "" : decodeHtmlEntities(product.deskripsi),
+    !product.deskripsi ? "" : product.deskripsi,
   );
   const [client, setClient] = useState(false);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -159,7 +159,9 @@ export default function EditPage({
               Deskripsi Produk
             </span>
 
-            <EditorQuill value={editorContent} onChange={setEditorContent} />
+            <EditorCK
+              {...{ value: editorContent, onChange: setEditorContent }}
+            />
           </div>
 
           <div className="flex items-center gap-2 justify-self-end">
