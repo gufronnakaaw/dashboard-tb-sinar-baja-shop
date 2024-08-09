@@ -52,7 +52,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
           <ButtonSidebar
             label="Banner"
-            path="/banner"
+            path="/banners"
             icon={<Image weight="bold" size={20} alt="icon banner" />}
           />
 
