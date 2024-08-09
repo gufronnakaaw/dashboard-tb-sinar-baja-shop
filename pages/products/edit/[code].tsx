@@ -136,7 +136,7 @@ export default function EditPage({
               </span>
               <input
                 type="file"
-                accept=".jpg,.jpeg,.png,.svg,.pdf"
+                accept=".jpg, .jpeg, .png"
                 className="rounded-xl bg-foreground-200 px-2 py-2 text-small text-foreground-600 file:mr-4 file:rounded-md file:border-0 file:bg-foreground-100 file:px-2 file:py-[2px] file:text-sm file:font-medium file:text-emerald-600 hover:file:bg-foreground-200"
                 onChange={(e) => {
                   if (!e.target.files) return;
@@ -147,7 +147,8 @@ export default function EditPage({
                     setFile(reader.result);
                   };
                   reader.onerror = function (error) {
-                    console.log("Error: ", error);
+                    Toast.error('Terjadi kesalahan saat menginput gambar')
+                    console.log(error);
                   };
                 }}
               />

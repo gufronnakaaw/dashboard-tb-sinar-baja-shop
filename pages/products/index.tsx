@@ -44,6 +44,7 @@ export default function ProductsPage({
   >({ url: `/dashboard/products?page=${page}`, method: "GET", token });
 
   const columnsProduk = [
+    { name: "#", uid: "index" },
     { name: "Gambar Produk", uid: "gambar_produk" },
     { name: "Kode Produk", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
@@ -55,7 +56,7 @@ export default function ProductsPage({
   ];
 
   function renderCellProduct(
-    product: DashboardProduct | undefined,
+    product: ({ index: number } & DashboardProduct) | undefined,
     columnKey: React.Key,
   ) {
     const cellValue = product
@@ -63,6 +64,8 @@ export default function ProductsPage({
       : null;
 
     switch (columnKey) {
+      case "index":
+        return <div className="w-max text-foreground">{product?.index}</div>;
       case "gambar_produk":
         return product?.image.length ? (
           <Image
@@ -156,6 +159,15 @@ export default function ProductsPage({
     }
   }
 
+  const products = data?.data.products.length
+    ? data?.data.products.map((item, index) => {
+        return {
+          index: (page - 1) * 10 + (index + 1),
+          ...item,
+        };
+      })
+    : [];
+
   return (
     <Layout title="Products Page">
       <Container>
@@ -227,7 +239,7 @@ export default function ProductsPage({
                 </TableHeader>
 
                 <TableBody
-                  items={data?.data.products ? data?.data.products : []}
+                  items={products}
                   isLoading={isLoading}
                   loadingContent={<Spinner color="default" size="md" />}
                 >

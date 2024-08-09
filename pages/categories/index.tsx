@@ -8,6 +8,7 @@ import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import {
   Button,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -34,17 +35,20 @@ export default function CategoriesPage({
   >({ url: "/dashboard/categories", method: "GET", token });
 
   const columnsKategori = [
+    { name: "#", uid: "index" },
     { name: "Nama", uid: "nama" },
     { name: "Disinkron Pada", uid: "updated_at" },
   ];
 
   function renderCellCategory(
-    category: ProductCategoryType,
+    category: { index: number } & ProductCategoryType,
     columnKey: React.Key,
   ) {
     const cellValue = category[columnKey as keyof ProductCategoryType];
 
     switch (columnKey) {
+      case "index":
+        return <div className="w-max text-foreground">{category.index}</div>;
       case "nama":
         return <div className="w-max text-foreground">{category.nama}</div>;
       case "updated_at":
@@ -79,9 +83,14 @@ export default function CategoriesPage({
     }
   }
 
-  if (isLoading) {
-    return;
-  }
+  const categories = data?.data.categories.length
+    ? data.data.categories.map((item, index) => {
+        return {
+          index: index + 1,
+          ...item,
+        };
+      })
+    : [];
 
   return (
     <Layout title="Categories Page">
@@ -103,7 +112,9 @@ export default function CategoriesPage({
               <div className="text-[12px] leading-snug">
                 <p className="text-foreground-600">Sinkron terakhir :</p>
                 <p className="font-medium text-foreground">
-                  {formatDate(data?.data.last_synchronized as string)}
+                  {data?.data.last_synchronized
+                    ? formatDate(data?.data.last_synchronized as string)
+                    : null}
                 </p>
               </div>
 
@@ -137,9 +148,9 @@ export default function CategoriesPage({
               </TableHeader>
 
               <TableBody
-                items={
-                  !data?.data.categories.length ? [] : data?.data.categories
-                }
+                items={categories}
+                isLoading={isLoading}
+                loadingContent={<Spinner color="default" size="md" />}
               >
                 {(item) => (
                   <TableRow key={item.nama}>
