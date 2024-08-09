@@ -250,6 +250,7 @@ export default function ProductsPage({
               classNames={{
                 cursor: "bg-emerald-600 text-white",
               }}
+              siblings={3}
             />
           </div>
         </section>
