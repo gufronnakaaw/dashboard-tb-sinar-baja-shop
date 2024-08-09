@@ -94,10 +94,10 @@ export default function ProductsPage({
           <CustomTooltip
             content={product?.nama_produk_asli}
             classNames={{
-              content: "max-w-[200px] font-medium",
+              content: "w-[200px] font-medium",
             }}
           >
-            <div className="max-w-[200px] text-foreground">
+            <div className="line-clamp-2 w-[200px] text-foreground">
               {product?.nama_produk_asli}
             </div>
           </CustomTooltip>
