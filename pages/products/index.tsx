@@ -10,6 +10,7 @@ import {
   Button,
   Input,
   Pagination,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -152,10 +153,6 @@ export default function ProductsPage({
     }
   }
 
-  if (isLoading) {
-    return;
-  }
-
   return (
     <Layout title="Products Page">
       <Container>
@@ -172,7 +169,9 @@ export default function ProductsPage({
               <div className="text-[12px] leading-snug">
                 <p className="text-foreground-600">Sinkron terakhir :</p>
                 <p className="font-medium text-foreground">
-                  {formatDate(data?.data.last_synchronized as string)}
+                  {data?.data.last_synchronized
+                    ? formatDate(data?.data.last_synchronized as string)
+                    : null}
                 </p>
               </div>
 
@@ -224,7 +223,11 @@ export default function ProductsPage({
                   )}
                 </TableHeader>
 
-                <TableBody items={data?.data.products}>
+                <TableBody
+                  items={data?.data.products ? data?.data.products : []}
+                  isLoading={isLoading}
+                  loadingContent={<Spinner color="default" size="md" />}
+                >
                   {(item) => (
                     <TableRow key={item.kode_item}>
                       {(columnKey) => (
@@ -238,20 +241,22 @@ export default function ProductsPage({
               </Table>
             </div>
 
-            <Pagination
-              isCompact
-              showControls
-              page={page}
-              total={Math.ceil(
-                ((data?.data.total_items as number) / 10) as number,
-              )}
-              onChange={setPage}
-              className="justify-self-center"
-              classNames={{
-                cursor: "bg-emerald-600 text-white",
-              }}
-              siblings={3}
-            />
+            {data?.data.total_items ? (
+              <Pagination
+                isCompact
+                showControls
+                page={page}
+                total={Math.ceil(
+                  ((data?.data.total_items as number) / 10) as number,
+                )}
+                onChange={setPage}
+                className="justify-self-center"
+                classNames={{
+                  cursor: "bg-emerald-600 text-white",
+                }}
+                siblings={10}
+              />
+            ) : null}
           </div>
         </section>
       </Container>
