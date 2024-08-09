@@ -183,7 +183,7 @@ export default function EditPage({
 export const getServerSideProps = (async ({ params, req }) => {
   const token = req.headers["access_token"] as string;
   const response: SuccessResponse<DashboardProduct> = await fetcher({
-    url: `/dashboard/products/${params?.slug}`,
+    url: `/dashboard/products/detail/${params?.code}`,
     method: "GET",
     token,
   });

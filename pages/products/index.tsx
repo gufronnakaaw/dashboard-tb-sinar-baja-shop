@@ -136,7 +136,10 @@ export default function ProductsPage({
               color="default"
               size="sm"
               onClick={() =>
-                window.open(`/products/edit/${product?.slug}`, "_blank")
+                window.open(
+                  `/products/edit/${encodeURIComponent(product?.kode_item as string)}`,
+                  "_blank",
+                )
               }
             >
               <PencilLine
