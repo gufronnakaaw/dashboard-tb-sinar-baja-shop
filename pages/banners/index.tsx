@@ -53,7 +53,7 @@ export default function BannerPage({
       const response = await fetch(croppedImage as string);
       const blob = await response.blob();
 
-      const fileConvert = new File([blob], "banners", {
+      const fileConvert = new File([blob], "banners.jpg", {
         type: "image/jpg",
       });
       formData.append("banner", fileConvert);
