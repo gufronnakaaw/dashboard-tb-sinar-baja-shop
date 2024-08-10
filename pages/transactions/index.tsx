@@ -1,3 +1,4 @@
+import { transactions } from "@/_dummy/transactions";
 import CardTransaction from "@/components/card/CardTransaction";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
@@ -92,14 +93,9 @@ export default function TransactionsPage() {
             </div>
 
             <div className="grid gap-2">
-              <CardTransaction />
-              <CardTransaction />
-              <CardTransaction />
-              <CardTransaction />
-              <CardTransaction />
-              <CardTransaction />
-              <CardTransaction />
-              <CardTransaction />
+              {transactions.map((transaction) => (
+                <CardTransaction key={transaction.id} data={transaction} />
+              ))}
             </div>
           </div>
         </section>

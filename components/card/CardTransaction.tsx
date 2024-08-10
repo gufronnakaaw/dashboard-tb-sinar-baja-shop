@@ -1,13 +1,34 @@
+import { TransactionsType } from "@/types/transactions.type";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { Chip } from "@nextui-org/react";
-import { MapTrifold } from "@phosphor-icons/react";
+import { Bag, MapTrifold, SealCheck, Truck } from "@phosphor-icons/react";
 import Link from "next/link";
 
-export default function CardTransaction() {
+export default function CardTransaction({ data }: { data: TransactionsType }) {
   return (
-    <div className="grid grid-cols-[2rem_1fr_repeat(2,160px)_230px_105px] items-center justify-items-center gap-4 rounded-xl border border-foreground-200 p-6 transition-all hover:border-emerald-600">
-      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground-200 font-semibold text-foreground-600">
-        1
+    <div
+      className={`relative grid grid-cols-[2rem_1fr_repeat(2,160px)_230px_105px] items-center justify-items-center gap-4 overflow-hidden rounded-xl border p-6 transition-all ${
+        data.status == "selesai"
+          ? "border-emerald-600"
+          : "border-foreground-200 hover:border-emerald-600"
+      }`}
+    >
+      {data.status == "selesai" ? (
+        <div className="absolute left-0 top-0 h-full w-[6px] bg-emerald-600" />
+      ) : null}
+
+      <div
+        className={`flex h-8 w-8 items-center justify-center rounded-full font-semibold ${
+          data.status == "selesai"
+            ? "bg-emerald-200 text-emerald-600"
+            : "bg-foreground-200 text-foreground-600"
+        }`}
+      >
+        {data.status == "selesai" ? (
+          <SealCheck weight="fill" size={18} />
+        ) : (
+          <Bag weight="bold" size={18} />
+        )}
       </div>
 
       <div className="justify-self-start">
@@ -17,41 +38,51 @@ export default function CardTransaction() {
         >
           Transaksi #190720240901
         </Link>
-        <p className="text-[12px] text-foreground-600">
-          Fajar Fadillah Agustian
-        </p>
+        <p className="text-[12px] text-foreground-600">{data.orders_name}</p>
       </div>
 
-      <div className="text-sm text-foreground">{formatRupiah(43509182)}</div>
+      <div className="text-sm text-foreground">
+        {formatRupiah(data.total_payment)}
+      </div>
 
       <Chip
         variant="flat"
         color="default"
         size="sm"
-        startContent={<MapTrifold weight="bold" size={14} />}
+        startContent={
+          data.delivery == "ambil sendiri" ? (
+            <MapTrifold weight="bold" size={14} />
+          ) : (
+            <Truck weight="bold" size={14} />
+          )
+        }
         className="gap-1"
         classNames={{
           base: "px-2",
-          content: "font-medium",
+          content: "font-medium capitalize",
         }}
       >
-        Ambil Sendiri
+        {data.delivery}
       </Chip>
 
-      <div className="text-sm text-foreground">
-        31 September 2024, 10:00 WIB
-      </div>
+      <div className="text-sm text-foreground">{data.date_order}</div>
 
       <Chip
         variant="flat"
-        color="success"
+        color={
+          data.status == "selesai"
+            ? "success"
+            : data.status == "sudah bayar"
+              ? "primary"
+              : "warning"
+        }
         size="sm"
         classNames={{
           base: "px-2",
-          content: "font-medium",
+          content: "font-medium capitalize",
         }}
       >
-        Selesai
+        {data.status}
       </Chip>
     </div>
   );
