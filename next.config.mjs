@@ -10,7 +10,11 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["@phosphor-icons/react", "@nextui-org/react"],
+    optimizePackageImports: [
+      "@phosphor-icons/react",
+      "@nextui-org/react",
+      "@ckeditor/ckeditor5-react",
+    ],
   },
   eslint: {
     ignoreDuringBuilds: true,
