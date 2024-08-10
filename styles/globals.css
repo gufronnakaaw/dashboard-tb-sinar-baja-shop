@@ -9,27 +9,7 @@
   @apply bg-emerald-600 text-white;
 }
 
-/* react-quill custom css */
-.ql-toolbar {
-  @apply rounded-t-xl border-foreground-200;
-}
-.ql-toolbar.ql-snow {
-  @apply font-sans;
-}
-.ql-container {
-  @apply rounded-b-xl border-foreground-200;
-}
-.ql-editor {
-  @apply font-sans text-sm;
-}
-
-@layer base {
-  ul,
-  ol {
-    list-style: revert;
-  }
-}
-
-.ck-editor {
-  @apply rounded-b-xl border-foreground-200;
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred,
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-focused {
+  @apply px-8;
 }
