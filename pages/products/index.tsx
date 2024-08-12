@@ -4,6 +4,7 @@ import Layout from "@/components/wrapper/Layout";
 import { SuccessResponse } from "@/types/global.type";
 import { DashboardProduct } from "@/types/product.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import {
@@ -23,19 +24,21 @@ import {
   ImageBroken,
   MagnifyingGlass,
   PencilLine,
+  Power,
   SealCheck,
   XCircle,
 } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import React, { useState } from "react";
+import Toast from "react-hot-toast";
 import useSWR from "swr";
 
 export default function ProductsPage({
   token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useSWR<
+  const { data, isLoading, mutate } = useSWR<
     SuccessResponse<{
       products: DashboardProduct[];
       total_items: number;
@@ -49,9 +52,9 @@ export default function ProductsPage({
     { name: "Kode Produk", uid: "kode_item" },
     { name: "Nama Produk", uid: "nama_produk" },
     { name: "Kategori", uid: "kategori" },
-    { name: "Deskripsi", uid: "deskripsi_produk" },
     { name: "Harga", uid: "harga" },
     { name: "Total Stok", uid: "total_stok" },
+    { name: "Status", uid: "status" },
     { name: "Aksi", uid: "action" },
   ];
 
@@ -104,22 +107,6 @@ export default function ProductsPage({
         );
       case "kategori":
         return <div className="w-max text-foreground">{product?.kategori}</div>;
-      case "deskripsi_produk":
-        return !product?.deskripsi ? (
-          <CustomTooltip
-            placement="top"
-            content="Deskripsi produk belum ada ❌"
-          >
-            <XCircle weight="fill" size={20} className="text-danger-600" />
-          </CustomTooltip>
-        ) : (
-          <CustomTooltip
-            placement="top"
-            content="Deskripsi produk sudah ada ✅"
-          >
-            <SealCheck weight="fill" size={20} className="text-emerald-600" />
-          </CustomTooltip>
-        );
       case "harga":
         return (
           <div className="w-max text-foreground">
@@ -130,32 +117,110 @@ export default function ProductsPage({
         return (
           <div className="w-max text-foreground">{product?.total_stok}</div>
         );
+      case "status":
+        return (
+          <div className="flex w-max justify-center gap-2">
+            {!product?.deskripsi ? (
+              <CustomTooltip
+                placement="top"
+                content="Deskripsi produk belum ada ❌"
+              >
+                <XCircle weight="fill" size={20} className="text-danger-600" />
+              </CustomTooltip>
+            ) : (
+              <CustomTooltip
+                placement="top"
+                content="Deskripsi produk sudah ada ✅"
+              >
+                <SealCheck
+                  weight="fill"
+                  size={20}
+                  className="text-emerald-600"
+                />
+              </CustomTooltip>
+            )}
+            {product?.active ? (
+              <CustomTooltip placement="top" content="Produk Aktif ✅">
+                <SealCheck
+                  weight="fill"
+                  size={20}
+                  className="text-emerald-600"
+                />
+              </CustomTooltip>
+            ) : (
+              <CustomTooltip placement="top" content="Produk Nonaktif ❌">
+                <XCircle weight="fill" size={20} className="text-danger-600" />
+              </CustomTooltip>
+            )}
+          </div>
+        );
       case "action":
         return (
-          <CustomTooltip content="Edit">
-            <Button
-              isIconOnly
-              variant="light"
-              color="default"
-              size="sm"
-              onClick={() =>
-                window.open(
-                  `/products/edit/${encodeURIComponent(product?.kode_item as string)}`,
-                  "_blank",
-                )
-              }
+          <>
+            <CustomTooltip content="Edit">
+              <Button
+                isIconOnly
+                variant="light"
+                color="default"
+                size="sm"
+                onClick={() =>
+                  window.open(
+                    `/products/edit/${encodeURIComponent(product?.kode_item as string)}`,
+                    "_blank",
+                  )
+                }
+              >
+                <PencilLine
+                  weight="bold"
+                  size={20}
+                  className="text-foreground-600"
+                />
+              </Button>
+            </CustomTooltip>
+            <CustomTooltip
+              content={product?.active ? "Non aktifkan" : "Aktifkan"}
             >
-              <PencilLine
-                weight="bold"
-                size={20}
-                className="text-foreground-600"
-              />
-            </Button>
-          </CustomTooltip>
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() => {
+                  handleActiveProduct(
+                    product?.kode_item as string,
+                    !product?.active,
+                  );
+                }}
+              >
+                <Power weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+          </>
         );
 
       default:
         return cellValue;
+    }
+  }
+
+  async function handleActiveProduct(kode_item: string, value: boolean) {
+    if (!confirm("Apakah anda yakin")) return;
+
+    try {
+      await fetcher({
+        url: "/dashboard/products/active",
+        method: "PATCH",
+        token,
+        data: {
+          kode_item,
+          value,
+        },
+      });
+
+      Toast.success("Update status berhasil");
+      mutate();
+    } catch (error) {
+      Toast.error("Update status gagal");
+      console.log(error);
     }
   }
 
@@ -269,7 +334,7 @@ export default function ProductsPage({
                 classNames={{
                   cursor: "bg-emerald-600 text-white",
                 }}
-                siblings={10}
+                siblings={5}
               />
             ) : null}
           </div>

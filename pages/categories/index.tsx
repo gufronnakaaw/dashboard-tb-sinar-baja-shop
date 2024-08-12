@@ -1,4 +1,5 @@
 import LoadingSync from "@/components/LoadingSync";
+import CustomTooltip from "@/components/Tooltip";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { SuccessResponse } from "@/types/global.type";
@@ -16,7 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { ArrowsCounterClockwise } from "@phosphor-icons/react";
+import {
+  ArrowsCounterClockwise,
+  Power,
+  SealCheck,
+  XCircle,
+} from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useState } from "react";
 import Toast from "react-hot-toast";
@@ -37,7 +43,9 @@ export default function CategoriesPage({
   const columnsKategori = [
     { name: "#", uid: "index" },
     { name: "Nama", uid: "nama" },
+    { name: "Aktif", uid: "active" },
     { name: "Disinkron Pada", uid: "updated_at" },
+    { name: "Aksi", uid: "action" },
   ];
 
   function renderCellCategory(
@@ -51,15 +59,67 @@ export default function CategoriesPage({
         return <div className="w-max text-foreground">{category.index}</div>;
       case "nama":
         return <div className="w-max text-foreground">{category.nama}</div>;
+      case "active":
+        return (
+          <div className="w-max">
+            {category.active ? (
+              <SealCheck weight="fill" size={20} className="text-emerald-600" />
+            ) : (
+              <XCircle weight="fill" size={20} className="text-danger-600" />
+            )}
+          </div>
+        );
       case "updated_at":
         return (
           <div className="w-max text-foreground">
             {formatDate(category.updated_at)}
           </div>
         );
+      case "action":
+        return (
+          <div className="w-max">
+            <CustomTooltip
+              content={category.active ? "Non aktifkan" : "Aktifkan"}
+            >
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                onClick={() => {
+                  handleActiveCategory(category.nama, !category.active);
+                }}
+              >
+                <Power weight="bold" size={20} className="text-default-600" />
+              </Button>
+            </CustomTooltip>
+          </div>
+        );
 
       default:
         return cellValue;
+    }
+  }
+
+  async function handleActiveCategory(nama: string, value: boolean) {
+    if (!confirm("Apakah anda yakin?")) return;
+
+    try {
+      await fetcher({
+        url: "/dashboard/categories/active",
+        method: "PATCH",
+        token,
+        data: {
+          nama_kategori: nama,
+          value,
+        },
+      });
+
+      Toast.success("Update status berhasil");
+      mutate();
+    } catch (error) {
+      setLoadingSync(false);
+      Toast.error("Update status gagal");
+      console.log(error);
     }
   }
 

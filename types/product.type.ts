@@ -15,9 +15,11 @@ export type DashboardProduct = {
   total_stok: number;
   image: { url: string }[];
   deskripsi: string;
+  active: boolean;
 };
 export type ProductCategoryType = {
   nama: string;
   created_at: string;
   updated_at: string;
+  active: boolean;
 };

@@ -37,5 +37,6 @@ export const config = {
     "/operational/:path*",
     "/products/:path*",
     "/transactions/:path*",
+    "/pulls/:path*",
   ],
 };
