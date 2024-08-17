@@ -1,5 +1,6 @@
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
+import { Bank } from "@/types/bank.type";
 import { SuccessResponse } from "@/types/global.type";
 import { Polling } from "@/types/polling.type";
 import { customStyleTable } from "@/utils/customStyleTable";
@@ -20,7 +21,7 @@ import React, { useState } from "react";
 import Toast from "react-hot-toast";
 import useSWR from "swr";
 
-export default function PullsPage({
+export default function BanksPage({
   token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [loadingSync, setLoadingSync] = useState(false);
@@ -33,24 +34,29 @@ export default function PullsPage({
 
   const columnsKategori = [
     { name: "#", uid: "index" },
-    { name: "URL", uid: "url" },
-    { name: "Label", uid: "label" },
+    { name: "Nomor Rekening", uid: "no_rekening" },
+    { name: "Atas Nama", uid: "atas_nama" },
+    { name: "Bank", uid: "bank" },
     { name: "Dibuat Pada", uid: "created_at" },
   ];
 
-  function renderCellPull(
-    polling: { index: number } & Polling,
+  function renderCellBank(
+    polling: { index: number } & Bank,
     columnKey: React.Key,
   ) {
-    const cellValue = polling[columnKey as keyof Polling];
+    const cellValue = polling[columnKey as keyof Bank];
 
     switch (columnKey) {
       case "index":
         return <div className="w-max text-foreground">{polling.index}</div>;
-      case "url":
-        return <div className="w-max text-foreground">{polling.url}</div>;
-      case "label":
-        return <div className="w-max text-foreground">{polling.label}</div>;
+      case "no_rekening":
+        return (
+          <div className="w-max text-foreground">{polling.no_rekening}</div>
+        );
+      case "atas_nama":
+        return <div className="w-max text-foreground">{polling.atas_nama}</div>;
+      case "bank":
+        return <div className="w-max text-foreground">{polling.bank}</div>;
       case "created_at":
         return (
           <div className="w-max text-foreground">
@@ -63,7 +69,7 @@ export default function PullsPage({
     }
   }
 
-  async function handleCreatePull() {
+  async function handleCreateBank() {
     setLoadingSync(true);
 
     try {
@@ -83,27 +89,38 @@ export default function PullsPage({
     }
   }
 
-  const pollings = data?.data.length
-    ? data.data.map((item, index) => {
-        return {
-          index: index + 1,
-          ...item,
-        };
-      })
-    : [];
+  // const pollings = data?.data.length
+  //   ? data.data.map((item, index) => {
+  //       return {
+  //         index: index + 1,
+  //         ...item,
+  //       };
+  //     })
+  //   : [];
+
+  const banks = [
+    {
+      id: "testing",
+      no_rekening: "00110011",
+      atas_nama: "Johnson Doe",
+      bank: "BCA",
+      created_at: "2024-08-17T22:31:50.418Z",
+    },
+  ].map((item, index) => {
+    return { index: index + 1, ...item };
+  });
 
   return (
-    <Layout title="Pulls Page">
+    <Layout title="Banks Page">
       <Container>
         <section className="grid gap-8">
           <div className="flex items-end justify-between gap-2">
             <div className="grid gap-0.5">
               <h1 className="text-[22px] font-semibold text-foreground">
-                Pulling Url 🔗
+                Nomor Rekening 💳
               </h1>
               <p className="text-foreground-600">
-                Halaman ini digunakan untuk membuat sinkron url. Hubungi
-                developer untuk info lebih lanjut.
+                Simpan nomor rekening di sini marketplace.
               </p>
             </div>
 
@@ -113,9 +130,9 @@ export default function PullsPage({
                 size="sm"
                 startContent={<Plus weight="bold" size={16} />}
                 className="bg-emerald-600 font-medium text-white"
-                onClick={handleCreatePull}
+                onClick={handleCreateBank}
               >
-                Tambah Url
+                Tambah Nomor Rekening
               </Button>
             </div>
           </div>
@@ -123,7 +140,7 @@ export default function PullsPage({
           <div className="grid gap-4">
             <Table
               isHeaderSticky
-              aria-label="products categories table"
+              aria-label="banks table"
               color="primary"
               selectionMode="none"
               classNames={customStyleTable}
@@ -136,14 +153,14 @@ export default function PullsPage({
               </TableHeader>
 
               <TableBody
-                items={pollings}
+                items={banks}
                 isLoading={isLoading}
                 loadingContent={<Spinner color="default" size="md" />}
               >
                 {(item) => (
                   <TableRow key={item.id}>
                     {(columnKey) => (
-                      <TableCell>{renderCellPull(item, columnKey)}</TableCell>
+                      <TableCell>{renderCellBank(item, columnKey)}</TableCell>
                     )}
                   </TableRow>
                 )}
