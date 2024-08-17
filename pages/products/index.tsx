@@ -30,21 +30,32 @@ import {
 } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import Toast from "react-hot-toast";
 import useSWR from "swr";
+import { useDebounce } from "use-debounce";
 
 export default function ProductsPage({
   token,
+  q,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [searchValue] = useDebounce(search, 1000);
+
+  const url = q
+    ? `/dashboard/products/search?q=${q}&page=${page}`
+    : `/dashboard/products?page=${page}`;
+
   const { data, isLoading, mutate } = useSWR<
     SuccessResponse<{
       products: DashboardProduct[];
       total_items: number;
       last_synchronized: string;
     }>
-  >({ url: `/dashboard/products?page=${page}`, method: "GET", token });
+  >({ url, method: "GET", token });
 
   const columnsProduk = [
     { name: "#", uid: "index" },
@@ -224,6 +235,15 @@ export default function ProductsPage({
     }
   }
 
+  useEffect(() => {
+    if (searchValue) {
+      setPage(1);
+      router.push(`/products?q=${searchValue}`);
+    } else {
+      router.push(`/products`);
+    }
+  }, [searchValue]);
+
   const products = data?.data.products.length
     ? data?.data.products.map((item, index) => {
         return {
@@ -286,6 +306,8 @@ export default function ProductsPage({
                 base: "max-w-[450px]",
                 input: "text-sm placeholder:text-sm",
               }}
+              defaultValue={q}
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             <div className="overflow-x-scroll scrollbar-hide">
@@ -344,10 +366,13 @@ export default function ProductsPage({
   );
 }
 
-export const getServerSideProps = (async ({ req }) => {
+export const getServerSideProps = (async ({ req, query }) => {
+  const q = query?.q as string;
+
   return {
     props: {
       token: req.headers["access_token"] as string,
+      q: q ? q : "",
     },
   };
-}) satisfies GetServerSideProps<{ token: string }>;
+}) satisfies GetServerSideProps<{ token: string; q: string }>;
