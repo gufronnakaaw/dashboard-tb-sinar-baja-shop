@@ -23,7 +23,8 @@
     "react-dom": "^18.3.1",
     "react-easy-crop": "^5.0.8",
     "react-hot-toast": "^2.4.1",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "use-debounce": "^10.0.3"
   },
   "devDependencies": {
     "@types/node": "^20",
