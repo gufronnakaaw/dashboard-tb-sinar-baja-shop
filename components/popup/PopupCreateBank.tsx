@@ -65,7 +65,7 @@ export default function PopupCreateBank({
         onClick={onOpen}
         className="bg-emerald-600 font-medium text-white"
       >
-        Atur Biaya Pengiriman
+        Tambah Nomor Rekening
       </Button>
 
       <Modal
