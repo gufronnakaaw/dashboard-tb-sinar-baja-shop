@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function CardTransaction({ data }: { data: TransactionsType }) {
   return (
     <div
-      className={`relative grid grid-cols-[2rem_1fr_repeat(2,160px)_230px_105px] items-center justify-items-center gap-4 overflow-hidden rounded-xl border p-6 transition-all ${
+      className={`relative grid grid-cols-[2rem_1fr_repeat(2,160px)_230px] items-center justify-items-center gap-4 overflow-hidden rounded-xl border p-6 transition-all ${
         data.status == "selesai"
           ? "border-emerald-600"
           : "border-foreground-200 hover:border-emerald-600"
@@ -66,24 +66,6 @@ export default function CardTransaction({ data }: { data: TransactionsType }) {
       </Chip>
 
       <div className="text-sm text-foreground">{data.date_order}</div>
-
-      <Chip
-        variant="flat"
-        color={
-          data.status == "selesai"
-            ? "success"
-            : data.status == "sudah bayar"
-              ? "primary"
-              : "warning"
-        }
-        size="sm"
-        classNames={{
-          base: "px-2",
-          content: "font-medium capitalize",
-        }}
-      >
-        {data.status}
-      </Chip>
     </div>
   );
 }
