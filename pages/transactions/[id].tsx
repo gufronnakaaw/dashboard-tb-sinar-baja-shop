@@ -4,17 +4,25 @@ import PopupShippingCost from "@/components/popup/PopupShippingCost";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { Button, Chip } from "@nextui-org/react";
-import { ArrowLeft, Clock, MapTrifold, XCircle } from "@phosphor-icons/react";
+import { Button, Checkbox, Chip } from "@nextui-org/react";
+import {
+  ArrowLeft,
+  Check,
+  Clock,
+  MapTrifold,
+  XCircle,
+} from "@phosphor-icons/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function TransactionDetailsPage() {
+  const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const router = useRouter();
 
   return (
     <Layout title="Details Transaction #190720240901">
       <Container>
-        <section className="mb-[100px] grid gap-8">
+        <section className="mb-16 grid gap-8">
           <Button
             variant="bordered"
             color="default"
@@ -26,7 +34,7 @@ export default function TransactionDetailsPage() {
             Kembali
           </Button>
 
-          <div className="grid h-screen grid-cols-[1fr_380px] items-start gap-8">
+          <div className="grid min-h-screen grid-cols-[1fr_380px] items-start gap-8">
             <div className="grid divide-y-2 divide-dashed divide-foreground-200">
               <div className="flex items-start gap-8 pb-6">
                 <div>
@@ -84,7 +92,7 @@ export default function TransactionDetailsPage() {
                   Limo Kec. Limo, Kota Depok, Jawa Barat
                 </p>
                 <PopupShippingCost />
-                <div className="mt-8 max-w-[600px] border-l-[4px] border-emerald-600 p-[6px_0_6px_16px] text-[12px]">
+                <div className="mt-8 max-w-[600px] border-l-[4px] border-emerald-600 p-[6px_0_6px_16px] text-[12px] italic">
                   <strong>Catatan:</strong> Pembeli memilih metode pengiriman{" "}
                   <strong>Diantar</strong>. Harap anda atur biaya pengiriman
                   sesuai dengan jarak alamat pembeli. Pastikan nominal yang anda
@@ -138,13 +146,37 @@ export default function TransactionDetailsPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between gap-2 pt-6">
-                <p className="font-medium text-foreground-600">
-                  Total Pembayaran
-                </p>
-                <h6 className="text-[22px] font-bold text-foreground">
-                  {formatRupiah(1560000)}
-                </h6>
+              <div className="grid gap-16 pt-6">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium text-foreground-600">
+                    Total Pembayaran
+                  </p>
+                  <h6 className="text-[22px] font-bold text-foreground">
+                    {formatRupiah(1560000)}
+                  </h6>
+                </div>
+
+                <div className="grid gap-3">
+                  <Checkbox
+                    color="default"
+                    isSelected={isOrderCompleted}
+                    onValueChange={setIsOrderCompleted}
+                    classNames={{
+                      label: "text-[12px] font-medium text-foreground-600",
+                    }}
+                  >
+                    Saya ingin menyelesaikan pesanan!
+                  </Checkbox>
+
+                  <Button
+                    isDisabled={isOrderCompleted ? false : true}
+                    variant="solid"
+                    startContent={<Check weight="bold" size={18} />}
+                    className={`font-medium ${isOrderCompleted ? "bg-emerald-600 text-white" : "bg-foreground-200 text-foreground-600"}`}
+                  >
+                    Ya, selesaikan pesanan
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -153,10 +185,12 @@ export default function TransactionDetailsPage() {
                 <h4 className="mb-2 font-semibold text-foreground">
                   Status Pembayaran
                 </h4>
+
                 <div className="mb-4 flex items-center justify-center gap-2 rounded-xl border-[2px] border-amber-500 bg-amber-600/20 p-2 text-sm font-semibold text-amber-500">
                   <Clock weight="bold" size={20} className="text-amber-500" />
                   Belum Dibayar
                 </div>
+
                 <p className="text-[12px] italic text-foreground-600">
                   <span className="font-semibold text-foreground">
                     Catatan:
