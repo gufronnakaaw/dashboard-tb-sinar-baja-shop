@@ -9,8 +9,8 @@ import {
   ArrowLeft,
   Check,
   Clock,
+  Invoice,
   MapTrifold,
-  Printer,
   XCircle,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
@@ -39,11 +39,11 @@ export default function TransactionDetailsPage() {
             <Button
               variant="solid"
               size="sm"
-              startContent={<Printer weight="bold" size={18} />}
-              // onClick={() => router.push("/transactions")}
+              startContent={<Invoice weight="bold" size={18} />}
+              onClick={() => router.push("/transactions/190720240901/invoice")}
               className="w-max bg-emerald-600 font-medium text-white"
             >
-              Cetak Invoice
+              Lihat Invoice
             </Button>
           </div>
 

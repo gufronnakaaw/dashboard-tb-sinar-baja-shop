@@ -1,7 +1,7 @@
 import { formatRupiah } from "@/utils/formatRupiah";
 import { angkaTerbilang } from "@/utils/terbilang";
 
-const TemplateInvoice = () => {
+const TemplateInvoice = (ref: any) => {
   return (
     <>
       <div className="container grid gap-4 pt-4 font-inter">
