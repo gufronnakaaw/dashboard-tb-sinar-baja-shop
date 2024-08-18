@@ -28,9 +28,9 @@ const TemplateInvoice = (ref: any) => {
               </div>
 
               <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">ID Transaksi</div>
+                <div className="font-medium">ID Pesanan</div>
                 <div className="font-medium">:</div>
-                <p className="font-medium">TX150824040847</p>
+                <p className="font-medium">190720240901</p>
               </div>
 
               <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
