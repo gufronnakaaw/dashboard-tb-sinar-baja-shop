@@ -10,6 +10,7 @@ import {
   Check,
   Clock,
   MapTrifold,
+  Printer,
   XCircle,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
@@ -23,16 +24,28 @@ export default function TransactionDetailsPage() {
     <Layout title="Details Transaction #190720240901">
       <Container>
         <section className="mb-16 grid gap-8">
-          <Button
-            variant="bordered"
-            color="default"
-            size="sm"
-            startContent={<ArrowLeft weight="bold" size={14} />}
-            onClick={() => router.push("/transactions")}
-            className="w-max font-medium"
-          >
-            Kembali
-          </Button>
+          <div className="flex max-w-[calc(100%-412px)] items-center justify-between gap-2">
+            <Button
+              variant="bordered"
+              color="default"
+              size="sm"
+              startContent={<ArrowLeft weight="bold" size={14} />}
+              onClick={() => router.push("/transactions")}
+              className="w-max font-medium"
+            >
+              Kembali
+            </Button>
+
+            <Button
+              variant="solid"
+              size="sm"
+              startContent={<Printer weight="bold" size={18} />}
+              // onClick={() => router.push("/transactions")}
+              className="w-max bg-emerald-600 font-medium text-white"
+            >
+              Cetak Invoice
+            </Button>
+          </div>
 
           <div className="grid min-h-screen grid-cols-[1fr_380px] items-start gap-8">
             <div className="grid divide-y-2 divide-dashed divide-foreground-200">
