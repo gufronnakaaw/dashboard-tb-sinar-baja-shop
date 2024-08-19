@@ -150,6 +150,7 @@ export default function ProductsPage({
                 />
               </CustomTooltip>
             )}
+
             {product?.active ? (
               <CustomTooltip placement="top" content="Produk Aktif ✅">
                 <SealCheck
@@ -167,7 +168,7 @@ export default function ProductsPage({
         );
       case "action":
         return (
-          <>
+          <div className="inline-flex items-center gap-1">
             <CustomTooltip content="Edit">
               <Button
                 isIconOnly
@@ -188,12 +189,12 @@ export default function ProductsPage({
                 />
               </Button>
             </CustomTooltip>
+
             <CustomTooltip
               content={product?.active ? "Non aktifkan" : "Aktifkan"}
             >
               <Button
                 isIconOnly
-                variant="light"
                 size="sm"
                 onClick={() => {
                   handleActiveProduct(
@@ -201,11 +202,12 @@ export default function ProductsPage({
                     !product?.active,
                   );
                 }}
+                className="bg-transparent hover:bg-danger-100"
               >
-                <Power weight="bold" size={20} className="text-default-600" />
+                <Power weight="bold" size={20} className="text-danger-500" />
               </Button>
             </CustomTooltip>
-          </>
+          </div>
         );
 
       default:
@@ -327,6 +329,11 @@ export default function ProductsPage({
 
                 <TableBody
                   items={products}
+                  emptyContent={
+                    <span className="text-sm font-medium italic text-foreground-600">
+                      Produk tidak ditemukan!
+                    </span>
+                  }
                   isLoading={isLoading}
                   loadingContent={<Spinner color="default" size="md" />}
                 >
