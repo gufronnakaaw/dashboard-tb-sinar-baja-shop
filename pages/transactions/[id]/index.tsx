@@ -4,13 +4,14 @@ import PopupShippingCost from "@/components/popup/PopupShippingCost";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { formatRupiah } from "@/utils/formatRupiah";
-import { Button, Checkbox, Chip } from "@nextui-org/react";
+import { Button, Checkbox } from "@nextui-org/react";
 import {
   ArrowLeft,
   Check,
   Clock,
   Invoice,
-  MapTrifold,
+  MapPin,
+  Truck,
   XCircle,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
@@ -79,38 +80,17 @@ export default function TransactionDetailsPage() {
                 </div>
               </div>
 
-              <div className="py-6">
+              <div className="py-4">
                 <div className="mb-4 flex items-end justify-between gap-2">
                   <h4 className="font-semibold text-foreground">
                     Informasi Pengiriman
                   </h4>
-
-                  <Chip
-                    variant="flat"
-                    color="default"
-                    size="sm"
-                    startContent={<MapTrifold weight="bold" size={14} />}
-                    className="gap-1"
-                    classNames={{
-                      base: "px-2",
-                      content: "font-medium",
-                    }}
-                  >
-                    Ambil Sendiri
-                  </Chip>
                 </div>
                 <p className="mb-1 text-sm text-foreground">+6289123456789</p>
                 <p className="mb-4 text-sm text-foreground">
                   Jl. Bukit Raya Persari, Blok. 12B, No.144C RT. 05/RW. 09, Kel.
                   Limo Kec. Limo, Kota Depok, Jawa Barat
                 </p>
-                <PopupShippingCost />
-                <div className="mt-8 max-w-[600px] border-l-[4px] border-emerald-600 p-[6px_0_6px_16px] text-[12px] italic">
-                  <strong>Catatan:</strong> Pembeli memilih metode pengiriman{" "}
-                  <strong>Diantar</strong>. Harap anda atur biaya pengiriman
-                  sesuai dengan jarak alamat pembeli. Pastikan nominal yang anda
-                  masukan benar!
-                </div>
               </div>
 
               <div className="grid gap-4 py-6">
@@ -126,26 +106,19 @@ export default function TransactionDetailsPage() {
               <div className="grid gap-1 py-6">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium text-foreground-600">
-                    Transfer
-                  </p>
-                  <h6 className="text-sm font-semibold text-foreground">-</h6>
-                </div>
-
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium text-foreground-600">
-                    Jumlah Barang
+                    Metode Pembayaran
                   </p>
                   <h6 className="text-sm font-semibold text-foreground">
-                    6 barang
+                    Transfer
                   </h6>
                 </div>
 
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium text-foreground-600">
-                    Total Harga
+                    Jumlah Item
                   </p>
                   <h6 className="text-sm font-semibold text-foreground">
-                    {formatRupiah(1560000)}
+                    6 item
                   </h6>
                 </div>
 
@@ -154,7 +127,16 @@ export default function TransactionDetailsPage() {
                     Biaya Pengiriman
                   </p>
                   <h6 className="text-sm font-semibold text-foreground">
-                    {formatRupiah(0)}
+                    {formatRupiah(50000)}
+                  </h6>
+                </div>
+
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium text-foreground-600">
+                    Subtotal
+                  </p>
+                  <h6 className="text-sm font-semibold text-foreground">
+                    {formatRupiah(150000)}
                   </h6>
                 </div>
               </div>
@@ -165,7 +147,7 @@ export default function TransactionDetailsPage() {
                     Total Pembayaran
                   </p>
                   <h6 className="text-[22px] font-bold text-foreground">
-                    {formatRupiah(1560000)}
+                    {formatRupiah(200000)}
                   </h6>
                 </div>
 
@@ -196,6 +178,32 @@ export default function TransactionDetailsPage() {
             <div className="sticky top-0 divide-y-2 divide-dashed divide-foreground-200 py-4">
               <div className="pb-6">
                 <h4 className="mb-2 font-semibold text-foreground">
+                  Metode Transaksi
+                </h4>
+
+                <div className="mb-4 flex items-center justify-center gap-2 rounded-xl border-gray-500 bg-gray-600/20 p-2 text-sm font-semibold text-gray-500">
+                  {true ? (
+                    <>
+                      <Truck
+                        weight="bold"
+                        size={20}
+                        className="text-gray-500"
+                      />
+                      Delivery
+                    </>
+                  ) : (
+                    <>
+                      <MapPin
+                        weight="bold"
+                        size={20}
+                        className="text-gray-500"
+                      />
+                      Pickup
+                    </>
+                  )}
+                </div>
+
+                <h4 className="mb-2 font-semibold text-foreground">
                   Status Pembayaran
                 </h4>
 
@@ -204,29 +212,48 @@ export default function TransactionDetailsPage() {
                   Belum Dibayar
                 </div>
 
-                <p className="text-[12px] italic text-foreground-600">
-                  <span className="font-semibold text-foreground">
-                    Catatan:
-                  </span>{" "}
-                  Pembeli belum melakukan pembayaran sesuai nominal yang
-                  tertera.
+                <p className="text-[13px] font-semibold italic text-foreground-600">
+                  Catatan :
                 </p>
+                <ol className="text-[13px] font-semibold italic text-foreground-600">
+                  <li>
+                    Pembeli belum melakukan pembayaran sesuai nominal yang
+                    tertera.
+                  </li>
+                  <li>
+                    Pembeli memilih metode pengiriman <strong>Diantar</strong>.
+                    Harap anda atur biaya pengiriman sesuai dengan jarak alamat
+                    pembeli. Pastikan nominal yang anda masukan benar!
+                  </li>
+                </ol>
               </div>
 
-              <div className="pt-6">
-                <div className="mb-2 flex items-center gap-2">
-                  <h4 className="font-semibold text-foreground">
-                    Verifikasi Pembayaran
+              <div className="grid grid-cols-2 gap-2 pt-6">
+                <div className="flex flex-col gap-2">
+                  <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
+                    Verifikasi Pembayaran{" "}
+                    <XCircle
+                      weight="fill"
+                      size={22}
+                      className="text-danger-600"
+                    />
                   </h4>
 
-                  <XCircle
-                    weight="fill"
-                    size={22}
-                    className="text-danger-600"
-                  />
+                  <PopupPaymentProot />
                 </div>
 
-                <PopupPaymentProot />
+                <div className="flex flex-col gap-2">
+                  <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
+                    Atur Biaya Pengiriman
+                    <XCircle
+                      weight="fill"
+                      size={22}
+                      className="text-danger-600"
+                    />
+                  </h4>
+
+                  <PopupShippingCost />
+                </div>
               </div>
             </div>
           </div>

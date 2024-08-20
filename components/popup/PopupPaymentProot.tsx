@@ -23,6 +23,7 @@ export default function PopupPaymentProot() {
         variant="flat"
         onPress={onOpen}
         className="bg-emerald-600 font-medium text-white"
+        size="sm"
       >
         Lihat Bukti Pembayaran
       </Button>
