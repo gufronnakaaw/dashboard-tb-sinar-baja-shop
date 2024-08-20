@@ -80,12 +80,10 @@ export default function TransactionDetailsPage() {
                 </div>
               </div>
 
-              <div className="py-4">
-                <div className="mb-4 flex items-end justify-between gap-2">
-                  <h4 className="font-semibold text-foreground">
-                    Informasi Pengiriman
-                  </h4>
-                </div>
+              <div className="py-6">
+                <h4 className="mb-4 font-semibold text-foreground">
+                  Informasi Pengiriman
+                </h4>
                 <p className="mb-1 text-sm text-foreground">+6289123456789</p>
                 <p className="mb-4 text-sm text-foreground">
                   Jl. Bukit Raya Persari, Blok. 12B, No.144C RT. 05/RW. 09, Kel.
@@ -96,8 +94,7 @@ export default function TransactionDetailsPage() {
               <div className="grid gap-4 py-6">
                 <h4 className="font-semibold text-foreground">Daftar Produk</h4>
 
-                <div className="grid gap-2">
-                  <CardProductOrder />
+                <div className="grid gap-3">
                   <CardProductOrder />
                   <CardProductOrder />
                 </div>
@@ -176,65 +173,77 @@ export default function TransactionDetailsPage() {
             </div>
 
             <div className="sticky top-0 divide-y-2 divide-dashed divide-foreground-200 py-4">
-              <div className="pb-6">
-                <h4 className="mb-2 font-semibold text-foreground">
-                  Metode Transaksi
-                </h4>
+              <div className="grid gap-6 pb-6">
+                <div className="grid gap-4">
+                  <div>
+                    <h4 className="mb-1 text-sm font-semibold text-foreground">
+                      Metode Transaksi
+                    </h4>
 
-                <div className="mb-4 flex items-center justify-center gap-2 rounded-xl border-gray-500 bg-gray-600/20 p-2 text-sm font-semibold text-gray-500">
-                  {true ? (
-                    <>
-                      <Truck
+                    <div className="flex items-center justify-center gap-2 rounded-lg border-[2px] border-foreground-400 bg-foreground-600/20 p-[6px_16px] text-[12px] font-semibold text-foreground-600">
+                      {true ? (
+                        <>
+                          <Truck
+                            weight="bold"
+                            size={18}
+                            className="text-gray-600"
+                          />
+                          Delivery
+                        </>
+                      ) : (
+                        <>
+                          <MapPin
+                            weight="bold"
+                            size={18}
+                            className="text-gray-600"
+                          />
+                          Pickup
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="mb-1 text-sm font-semibold text-foreground">
+                      Status Pembayaran
+                    </h4>
+
+                    <div className="flex items-center justify-center gap-2 rounded-lg border-[2px] border-amber-400 bg-amber-600/20 p-[6px_16px] text-[12px] font-semibold text-amber-500">
+                      <Clock
                         weight="bold"
-                        size={20}
-                        className="text-gray-500"
+                        size={18}
+                        className="text-amber-500"
                       />
-                      Delivery
-                    </>
-                  ) : (
-                    <>
-                      <MapPin
-                        weight="bold"
-                        size={20}
-                        className="text-gray-500"
-                      />
-                      Pickup
-                    </>
-                  )}
+                      Belum Dibayar
+                    </div>
+                  </div>
                 </div>
 
-                <h4 className="mb-2 font-semibold text-foreground">
-                  Status Pembayaran
-                </h4>
-
-                <div className="mb-4 flex items-center justify-center gap-2 rounded-xl border-[2px] border-amber-500 bg-amber-600/20 p-2 text-sm font-semibold text-amber-500">
-                  <Clock weight="bold" size={20} className="text-amber-500" />
-                  Belum Dibayar
+                <div className="text-[12px] italic">
+                  <p className="mb-1 font-semibold text-foreground">
+                    Catatan :
+                  </p>
+                  <ol className="list-outside pl-3 font-medium text-foreground-600">
+                    <li>
+                      Pembeli belum melakukan pembayaran sesuai nominal yang
+                      tertera.
+                    </li>
+                    <li>
+                      Pembeli memilih metode pengiriman <strong>Diantar</strong>
+                      . Harap anda atur biaya pengiriman sesuai dengan jarak
+                      alamat pembeli. Pastikan nominal yang anda masukan benar!
+                    </li>
+                  </ol>
                 </div>
-
-                <p className="text-[13px] font-semibold italic text-foreground-600">
-                  Catatan :
-                </p>
-                <ol className="text-[13px] font-semibold italic text-foreground-600">
-                  <li>
-                    Pembeli belum melakukan pembayaran sesuai nominal yang
-                    tertera.
-                  </li>
-                  <li>
-                    Pembeli memilih metode pengiriman <strong>Diantar</strong>.
-                    Harap anda atur biaya pengiriman sesuai dengan jarak alamat
-                    pembeli. Pastikan nominal yang anda masukan benar!
-                  </li>
-                </ol>
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-6">
-                <div className="flex flex-col gap-2">
+                <div className="grid gap-2">
                   <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
                     Verifikasi Pembayaran{" "}
                     <XCircle
                       weight="fill"
-                      size={22}
+                      size={18}
                       className="text-danger-600"
                     />
                   </h4>
@@ -242,12 +251,12 @@ export default function TransactionDetailsPage() {
                   <PopupPaymentProot />
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="grid gap-2">
                   <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
                     Atur Biaya Pengiriman
                     <XCircle
                       weight="fill"
-                      size={22}
+                      size={18}
                       className="text-danger-600"
                     />
                   </h4>
