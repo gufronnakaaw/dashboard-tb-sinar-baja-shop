@@ -1,20 +1,45 @@
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
+import { formatDayWithoutTime } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
+  const [time, setTime] = useState(new Date());
+  const [client, setClient] = useState(false);
+
+  useEffect(() => {
+    setClient(true);
+
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (num: any) => String(num).padStart(2, "0");
+
+  if (!client) {
+    return;
+  }
+
   return (
     <Layout title="Dashboard Page">
       <Container>
         <section className="grid gap-8">
           <div className="grid gap-0.5">
             <h1 className="text-[22px] font-semibold text-foreground">
-              Selamat Datang 👋, Admin
+              Selamat Datang, Admin 👋
             </h1>
             <p className="text-foreground-600">
-              Berikut rangkuman tokomu hari ini.
+              Berikut rangkuman tokomu{" "}
+              <span className="font-semibold text-foreground">
+                {formatDayWithoutTime(new Date())}{" "}
+                {`${formatTime(time.getHours())}:${formatTime(time.getMinutes())}:${formatTime(time.getSeconds())}`}
+              </span>
             </p>
           </div>
 
