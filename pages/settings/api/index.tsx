@@ -1,8 +1,11 @@
+import PopupCreatePull from "@/components/popup/PopupCreatePull";
+import CustomTooltip from "@/components/Tooltip";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { SuccessResponse } from "@/types/global.type";
 import { Polling } from "@/types/polling.type";
 import { customStyleTable } from "@/utils/customStyleTable";
+import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import {
   Button,
@@ -14,17 +17,14 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Plus } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import React, { useState } from "react";
 import Toast from "react-hot-toast";
 import useSWR from "swr";
 
 export default function APIPage({
   token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [loadingSync, setLoadingSync] = useState(false);
-
   const { data, isLoading, mutate } = useSWR<SuccessResponse<Polling[]>>({
     url: "/dashboard/polling",
     method: "GET",
@@ -36,6 +36,7 @@ export default function APIPage({
     { name: "URL", uid: "url" },
     { name: "Label", uid: "label" },
     { name: "Dibuat Pada", uid: "created_at" },
+    { name: "Aksi", uid: "action" },
   ];
 
   function renderCellPull(
@@ -57,28 +58,39 @@ export default function APIPage({
             {formatDate(polling.created_at)}
           </div>
         );
+      case "action":
+        return (
+          <CustomTooltip content="Hapus">
+            <Button
+              isIconOnly
+              variant="light"
+              size="sm"
+              onClick={() => handleDeletePull(polling.id)}
+            >
+              <Trash weight="bold" size={20} className="text-default-600" />
+            </Button>
+          </CustomTooltip>
+        );
 
       default:
         return cellValue;
     }
   }
 
-  async function handleCreatePull() {
-    setLoadingSync(true);
+  async function handleDeletePull(id: number) {
+    if (!confirm("apakah anda yakin?")) return;
 
     try {
-      // await fetcher({
-      //   url: "/dashboard/sync/categories",
-      //   method: "POST",
-      //   token,
-      // });
+      await fetcher({
+        url: `/dashboard/polling/${id}`,
+        method: "DELETE",
+        token,
+      });
 
-      Toast.success("Sinkron kategori berhasil");
+      Toast.success("Hapus url berhasil");
       mutate();
-      setLoadingSync(false);
     } catch (error) {
-      setLoadingSync(false);
-      Toast.error("Sinkron kategori gagal");
+      Toast.error("Hapus url gagal");
       console.log(error);
     }
   }
@@ -109,15 +121,7 @@ export default function APIPage({
             </div>
 
             <div className="flex items-center gap-4">
-              <Button
-                variant="solid"
-                size="sm"
-                startContent={<Plus weight="bold" size={16} />}
-                className="bg-emerald-600 font-medium text-white"
-                onClick={handleCreatePull}
-              >
-                Tambah Url
-              </Button>
+              <PopupCreatePull {...{ token, mutate }} />
             </div>
           </div>
 
