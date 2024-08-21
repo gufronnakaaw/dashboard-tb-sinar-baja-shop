@@ -1,6 +1,7 @@
 import CardProductOrder from "@/components/card/CardProductOrder";
 import PopupPaymentProot from "@/components/popup/PopupPaymentProot";
 import PopupShippingCost from "@/components/popup/PopupShippingCost";
+import { TemplateInvoice } from "@/components/template/TemplateInvoice";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
 import { formatRupiah } from "@/utils/formatRupiah";
@@ -9,17 +10,22 @@ import {
   ArrowLeft,
   Check,
   Clock,
-  Invoice,
   MapPin,
+  Printer,
   Truck,
   XCircle,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 
 export default function TransactionDetailsPage() {
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const router = useRouter();
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <Layout title="Details Transaction #190720240901">
@@ -31,7 +37,7 @@ export default function TransactionDetailsPage() {
               color="default"
               size="sm"
               startContent={<ArrowLeft weight="bold" size={14} />}
-              onClick={() => router.push("/transactions")}
+              onClick={() => router.back()}
               className="w-max font-medium"
             >
               Kembali
@@ -40,12 +46,16 @@ export default function TransactionDetailsPage() {
             <Button
               variant="solid"
               size="sm"
-              startContent={<Invoice weight="bold" size={18} />}
-              onClick={() => router.push("/transactions/190720240901/invoice")}
+              startContent={<Printer weight="bold" size={18} />}
+              onClick={handlePrint}
               className="w-max bg-emerald-600 font-medium text-white"
             >
-              Lihat Invoice
+              Cetak Invoice
             </Button>
+          </div>
+
+          <div className="hidden">
+            <TemplateInvoice ref={componentRef} />
           </div>
 
           <div className="grid min-h-screen grid-cols-[1fr_380px] items-start gap-8">

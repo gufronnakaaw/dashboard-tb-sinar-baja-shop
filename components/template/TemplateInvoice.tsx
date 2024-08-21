@@ -1,127 +1,100 @@
 import { formatRupiah } from "@/utils/formatRupiah";
-import { angkaTerbilang } from "@/utils/terbilang";
+import { forwardRef } from "react";
+import CardProductOrder from "../card/CardProductOrder";
 
-const TemplateInvoice = (ref: any) => {
+const Invoice = (props: any, ref: any) => {
   return (
     <>
-      <div className="container grid gap-4 pt-4 font-inter">
-        <div className="flex items-start justify-between gap-4">
-          <div className="grid gap-1">
-            <h1 className="font-bold text-black">TB. SINAR BAJA</h1>
-            <p className="max-w-[300px] text-[10px] font-medium text-black">
-              Jl. Letjend Sutoyo No.67, Burengan, Kec. Pesantren, Kabupaten
-              Kediri, Jawa Timur 64131
-            </p>
-            <p className="max-w-[300px] text-[10px] font-medium text-black">
-              082140735711
-            </p>
+      <div
+        className="grid divide-y-2 divide-dashed divide-foreground-200 px-4 pt-2"
+        ref={ref}
+      >
+        <div className="flex items-start gap-8 pb-6">
+          <div>
+            <p className="mb-1 text-[12px] text-foreground-600">ID Pesanan</p>
+            <h5 className="font-semibold text-foreground">#190720240901</h5>
           </div>
 
-          <div className="grid items-start gap-1">
-            <h1 className="font-bold uppercase text-black">Invoice</h1>
+          <div>
+            <p className="mb-1 text-[12px] text-foreground-600">Pesanan Dari</p>
+            <h5 className="font-semibold text-foreground">
+              Fajar Fadillah Agustian
+            </h5>
+          </div>
 
-            <div className="grid">
-              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">Nomor</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">INVOUT150824040847</p>
-              </div>
-
-              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">ID Pesanan</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">190720240901</p>
-              </div>
-
-              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">Pembeli</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">Fajar Fadillah Agustian</p>
-              </div>
-
-              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">Tanggal</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">15 Agustus 2024</p>
-              </div>
-
-              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">No. Telpon</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">0853423582136</p>
-              </div>
-
-              <div className="grid w-[250px] grid-cols-[70px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="font-medium">Alamat</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae
-                  ut accusantium obcaecati itaque aliquid animi dolores corrupti
-                  delectus officiis quidem amet.
-                </p>
-              </div>
-            </div>
+          <div>
+            <p className="mb-1 text-[12px] text-foreground-600">
+              Waktu Pemesanan
+            </p>
+            <h5 className="font-semibold leading-tight text-foreground">
+              3 Agustus 2024, <span className="text-[12px]">10:42 WIB</span>
+            </h5>
           </div>
         </div>
 
-        <div className="grid gap-4">
-          <table className="table-auto border border-black">
-            <thead>
-              <tr className="border-b border-black text-left text-[10px] font-medium text-black">
-                <th className="px-2 py-1">Jumlah</th>
-                <th className="px-2 py-1">Nama Produk</th>
-                <th className="px-2 py-1">Harga</th>
-                <th className="px-2 py-1">Subtotal</th>
-              </tr>
-            </thead>
+        <div className="py-4">
+          <div className="mb-4 flex items-end justify-between gap-2">
+            <h4 className="font-semibold text-foreground">
+              Informasi Pengiriman
+            </h4>
+          </div>
+          <p className="mb-1 text-sm text-foreground">+6289123456789</p>
+          <p className="mb-4 text-sm text-foreground">
+            Jl. Bukit Raya Persari, Blok. 12B, No.144C RT. 05/RW. 09, Kel. Limo
+            Kec. Limo, Kota Depok, Jawa Barat
+          </p>
+        </div>
 
-            <tbody>
-              <tr className="text-left text-[10px] text-black">
-                <td className="w-[100px] px-2 py-1">3 btg</td>
-                <td className="w-max px-2 py-1">Kayu Jati Perhutani</td>
-                <td className="w-max px-2 py-1">{formatRupiah(210000)}</td>
-                <td className="w-amax px-2 py-1">{formatRupiah(630000)}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="grid gap-4 py-6">
+          <h4 className="font-semibold text-foreground">Daftar Produk</h4>
 
-          <div className="flex items-start justify-between">
-            <div className="grid grid-cols-[45px_2px_1fr] gap-1 text-[10px] text-black">
-              <div className="w-24 font-bold italic">Terbilang</div>
-              <div className="font-bold italic">:</div>
-              <p className="max-w-[450px] font-bold capitalize italic">
-                {angkaTerbilang(680000)}
-              </p>
-            </div>
+          <div className="grid gap-2">
+            <CardProductOrder />
+            <CardProductOrder />
+            <CardProductOrder />
+          </div>
+        </div>
 
-            <div className="grid justify-self-end border border-black p-2">
-              <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="w-24 font-medium">Ongkir</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">{formatRupiah(50000)}</p>
-              </div>
-
-              <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="w-24 font-medium">Subtotal</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">{formatRupiah(630000)}</p>
-              </div>
-
-              <div className="grid grid-cols-[65px_6px_1fr] gap-1 text-[10px] text-black">
-                <div className="w-24 font-medium">Total</div>
-                <div className="font-medium">:</div>
-                <p className="font-medium">{formatRupiah(680000)}</p>
-              </div>
-            </div>
+        <div className="grid gap-1 py-6">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-foreground-600">
+              Metode Pembayaran
+            </p>
+            <h6 className="text-sm font-semibold text-foreground">Transfer</h6>
           </div>
 
-          <div className="mr-5 mt-2 grid justify-self-end">
-            <h1 className="text-[10px] font-normal text-black">
-              Kediri, 15 Agustus 2024
-            </h1>
-            <h1 className="mt-1 text-center text-[10px] font-bold text-black">
-              TB. SINAR BAJA
-            </h1>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-foreground-600">
+              Jumlah Item
+            </p>
+            <h6 className="text-sm font-semibold text-foreground">6 item</h6>
+          </div>
+
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-foreground-600">
+              Biaya Pengiriman
+            </p>
+            <h6 className="text-sm font-semibold text-foreground">
+              {formatRupiah(50000)}
+            </h6>
+          </div>
+
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-foreground-600">Subtotal</p>
+            <h6 className="text-sm font-semibold text-foreground">
+              {formatRupiah(150000)}
+            </h6>
+          </div>
+        </div>
+
+        <div className="grid gap-16 pt-6">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-foreground-600">
+              Total Pembayaran
+            </p>
+            <h6 className="text-[22px] font-bold text-foreground">
+              {formatRupiah(200000)}
+            </h6>
           </div>
         </div>
       </div>
@@ -129,4 +102,4 @@ const TemplateInvoice = (ref: any) => {
   );
 };
 
-export default TemplateInvoice;
+export const TemplateInvoice = forwardRef(Invoice);
