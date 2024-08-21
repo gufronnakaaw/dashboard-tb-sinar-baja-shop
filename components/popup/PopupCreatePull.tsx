@@ -75,7 +75,7 @@ export default function PopupCreatePull({
             <>
               <ModalHeader />
 
-              <ModalBody>
+              <ModalBody className="gap-8">
                 <Input
                   isRequired
                   type="text"
@@ -84,6 +84,7 @@ export default function PopupCreatePull({
                   color="default"
                   label="URL"
                   labelPlacement="outside"
+                  placeholder="http://127.0.0.1/api/..."
                   name="url"
                   autoComplete="off"
                   onChange={(e) => {
@@ -101,6 +102,7 @@ export default function PopupCreatePull({
                   isRequired
                   label="Label"
                   labelPlacement="outside"
+                  placeholder="Pilih label URL"
                   onChange={(e) => {
                     setInput({
                       ...input,
