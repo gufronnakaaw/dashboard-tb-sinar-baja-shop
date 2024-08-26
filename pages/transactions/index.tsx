@@ -3,7 +3,7 @@ import CardTransaction from "@/components/card/CardTransaction";
 import TabsTransaction from "@/components/TabsTransaction";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
-import { Input, Pagination } from "@nextui-org/react";
+import { Input, Pagination, ScrollShadow } from "@nextui-org/react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 
@@ -24,7 +24,9 @@ export default function TransactionsPage() {
           </div>
 
           <div className="grid gap-4">
-            <TabsTransaction />
+            <ScrollShadow orientation="horizontal">
+              <TabsTransaction />
+            </ScrollShadow>
 
             <Input
               type="text"

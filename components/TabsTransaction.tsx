@@ -1,5 +1,13 @@
 import { Chip, Tab, Tabs } from "@nextui-org/react";
-import { CheckCircle, Clock, SealCheck, XCircle } from "@phosphor-icons/react";
+import {
+  ClockClockwise,
+  ClockCountdown,
+  ClockUser,
+  Money,
+  SealCheck,
+  SealQuestion,
+  XCircle,
+} from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -14,34 +22,48 @@ type TabTransactionType = {
 const tabTransaction: TabTransactionType[] = [
   {
     id: 1,
-    key: "waiting",
-    label: "Menunggu",
-    icon: <Clock weight="bold" size={20} />,
+    key: "waiting-reply",
+    label: "Menunggu Balasan",
+    icon: <ClockCountdown weight="bold" size={20} />,
     notification: 0,
   },
   {
     id: 2,
-    key: "not_paid",
-    label: "Belum Bayar",
-    icon: <Clock weight="bold" size={20} />,
-    notification: 3,
+    key: "waiting-user-reply",
+    label: "Menunggu Balasan User",
+    icon: <ClockUser weight="bold" size={20} />,
+    notification: 4,
   },
   {
     id: 3,
-    key: "already_paid",
-    label: "Sudah Bayar",
-    icon: <CheckCircle weight="bold" size={20} />,
-    notification: 7,
+    key: "not_paid",
+    label: "Belum Bayar",
+    icon: <ClockClockwise weight="bold" size={20} />,
+    notification: 3,
   },
   {
     id: 4,
+    key: "verification",
+    label: "Verifikasi",
+    icon: <SealQuestion weight="bold" size={20} />,
+    notification: 7,
+  },
+  {
+    id: 5,
+    key: "already_paid",
+    label: "Sudah Bayar",
+    icon: <Money weight="bold" size={20} />,
+    notification: 12,
+  },
+  {
+    id: 6,
     key: "finished",
     label: "Selesai",
     icon: <SealCheck weight="bold" size={20} />,
     notification: 10,
   },
   {
-    id: 5,
+    id: 7,
     key: "canceled",
     label: "Dibatalkan",
     icon: <XCircle weight="bold" size={20} />,
@@ -59,7 +81,7 @@ export default function TabsTransaction() {
       size="sm"
       variant="underlined"
       classNames={{
-        tabList: "gap-6 w-full relative rounded-none p-0",
+        tabList: "gap-8 w-full relative rounded-none pb-2",
         cursor: "w-full bg-[#059669]",
         tab: "max-w-fit px-0 h-12",
         tabContent: "group-data-[selected=true]:text-[#059669] font-medium",
