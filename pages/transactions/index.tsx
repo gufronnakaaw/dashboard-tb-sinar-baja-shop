@@ -3,8 +3,7 @@ import CardTransaction from "@/components/card/CardTransaction";
 import TabsTransaction from "@/components/TabsTransaction";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
-import { Input, Pagination, ScrollShadow } from "@nextui-org/react";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Pagination, ScrollShadow } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
 export default function TransactionsPage() {
@@ -27,25 +26,6 @@ export default function TransactionsPage() {
             <ScrollShadow orientation="horizontal">
               <TabsTransaction />
             </ScrollShadow>
-
-            <Input
-              type="text"
-              variant="flat"
-              color="default"
-              labelPlacement="outside"
-              placeholder="Cari ID Transaksi atau Nama Pembeli"
-              startContent={
-                <MagnifyingGlass
-                  weight="bold"
-                  size={20}
-                  className="text-foreground-400"
-                />
-              }
-              classNames={{
-                base: "max-w-[450px]",
-                input: "text-sm placeholder:text-sm",
-              }}
-            />
 
             <div className="grid gap-2">
               {transactions.map((transaction) => (
