@@ -9,14 +9,14 @@
   @apply bg-emerald-600 text-white;
 }
 
+::-webkit-scrollbar.scrollbar-custom {
+  @apply h-2 bg-foreground-100;
+}
+::-webkit-scrollbar-thumb.scrollbar-custom {
+  @apply h-full rounded-full bg-foreground-300 hover:bg-foreground-400;
+}
+
 .ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred,
 .ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-focused {
   @apply px-8;
-}
-
-@layer base {
-  ul,
-  ol {
-    list-style: revert;
-  }
 }

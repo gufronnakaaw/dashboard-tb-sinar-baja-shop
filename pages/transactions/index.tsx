@@ -23,7 +23,7 @@ export default function TransactionsPage() {
           </div>
 
           <div className="grid gap-4">
-            <ScrollShadow orientation="horizontal">
+            <ScrollShadow orientation="horizontal" className="scrollbar-custom">
               <TabsTransaction />
             </ScrollShadow>
 

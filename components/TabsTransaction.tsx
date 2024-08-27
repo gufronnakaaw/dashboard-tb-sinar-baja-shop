@@ -81,7 +81,7 @@ export default function TabsTransaction() {
       size="sm"
       variant="underlined"
       classNames={{
-        tabList: "gap-8 w-full relative rounded-none pb-2",
+        tabList: "gap-8 w-full relative rounded-none pb-3",
         cursor: "w-full bg-[#059669]",
         tab: "max-w-fit px-0 h-12",
         tabContent: "group-data-[selected=true]:text-[#059669] font-medium",
