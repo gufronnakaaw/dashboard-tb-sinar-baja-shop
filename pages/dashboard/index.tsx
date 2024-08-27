@@ -1,14 +1,37 @@
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
+import { SuccessResponse } from "@/types/global.type";
 import { formatDayWithoutTime } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { ArrowRight } from "@phosphor-icons/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
-export default function DashboardPage() {
+export default function DashboardPage({
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState(new Date());
   const [client, setClient] = useState(false);
+
+  const { data, isLoading } = useSWR<
+    SuccessResponse<{
+      transactions: {
+        amount: number;
+        total: number;
+      };
+      delivery: {
+        amount: number;
+        total: number;
+      };
+    }>
+  >(
+    { url: "/dashboard", method: "GET", token },
+    {
+      refreshInterval: 60000,
+    },
+  );
 
   useEffect(() => {
     setClient(true);
@@ -23,6 +46,10 @@ export default function DashboardPage() {
   const formatTime = (num: any) => String(num).padStart(2, "0");
 
   if (!client) {
+    return;
+  }
+
+  if (isLoading) {
     return;
   }
 
@@ -52,17 +79,21 @@ export default function DashboardPage() {
                   Pesanan Baru
                 </p>
                 <h6 className="text-[32px] font-semibold text-foreground">
-                  52
+                  {data?.data.transactions.amount}
                 </h6>
                 <p className="text-sm font-medium text-foreground-600">
                   Potensi Pendapatan{" "}
                   <span className="font-semibold text-emerald-600">
-                    {formatRupiah(302123000)}
+                    {formatRupiah(data?.data.transactions.total as number)}
                   </span>
                 </p>
                 <Link
                   href="/transactions?sort=newest"
                   className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("dalam proses pengembangan");
+                  }}
                 >
                   Lihat Detail
                   <ArrowRight weight="bold" size={14} />
@@ -74,17 +105,21 @@ export default function DashboardPage() {
                   Pengiriman Diantar
                 </p>
                 <h6 className="text-[32px] font-semibold text-foreground">
-                  28
+                  {data?.data.delivery.amount}
                 </h6>
                 <p className="text-sm font-medium text-foreground-600">
                   Potensi Pendapatan{" "}
                   <span className="font-semibold text-emerald-600">
-                    {formatRupiah(29728000)}
+                    {formatRupiah(data?.data.delivery.total as number)}
                   </span>
                 </p>
                 <Link
                   href="/transactions?shipment=delivered"
                   className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("dalam proses pengembangan");
+                  }}
                 >
                   Lihat Detail
                   <ArrowRight weight="bold" size={14} />
@@ -97,3 +132,11 @@ export default function DashboardPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async ({ req }) => {
+  return {
+    props: {
+      token: req.headers["access_token"] as string,
+    },
+  };
+}) satisfies GetServerSideProps<{ token: string }>;
