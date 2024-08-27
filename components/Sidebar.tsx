@@ -84,7 +84,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
           <ButtonSidebar
             label="Transaksi"
-            path="/transactions"
+            path="/transactions?status=waitrep"
             icon={<MoneyWavy weight="bold" size={20} />}
           />
 

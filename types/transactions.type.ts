@@ -1,9 +1,8 @@
 export type TransactionsType = {
-  id: number;
-  orders_name: string;
-  amount_order: number;
-  total_payment: number;
-  date_order: string;
-  delivery: string;
-  status: string;
+  transaksi_id: string;
+  nama_penerima: string;
+  total: number;
+  type: string;
+  created_at: string;
+  status: null;
 };

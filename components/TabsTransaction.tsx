@@ -1,8 +1,10 @@
+import { SuccessResponse } from "@/types/global.type";
 import { Chip, Tab, Tabs } from "@nextui-org/react";
 import {
   ClockClockwise,
   ClockCountdown,
   ClockUser,
+  MagnifyingGlass,
   Money,
   SealCheck,
   SealQuestion,
@@ -10,6 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import { useRouter } from "next/router";
 import React from "react";
+import useSWR from "swr";
 
 type TabTransactionType = {
   id: number;
@@ -19,60 +22,86 @@ type TabTransactionType = {
   notification: number;
 };
 
-const tabTransaction: TabTransactionType[] = [
-  {
-    id: 1,
-    key: "waiting-reply",
-    label: "Menunggu Balasan",
-    icon: <ClockCountdown weight="bold" size={20} />,
-    notification: 0,
-  },
-  {
-    id: 2,
-    key: "waiting-user-reply",
-    label: "Menunggu Balasan User",
-    icon: <ClockUser weight="bold" size={20} />,
-    notification: 4,
-  },
-  {
-    id: 3,
-    key: "not_paid",
-    label: "Belum Bayar",
-    icon: <ClockClockwise weight="bold" size={20} />,
-    notification: 3,
-  },
-  {
-    id: 4,
-    key: "verification",
-    label: "Verifikasi",
-    icon: <SealQuestion weight="bold" size={20} />,
-    notification: 7,
-  },
-  {
-    id: 5,
-    key: "already_paid",
-    label: "Sudah Bayar",
-    icon: <Money weight="bold" size={20} />,
-    notification: 12,
-  },
-  {
-    id: 6,
-    key: "finished",
-    label: "Selesai",
-    icon: <SealCheck weight="bold" size={20} />,
-    notification: 10,
-  },
-  {
-    id: 7,
-    key: "canceled",
-    label: "Dibatalkan",
-    icon: <XCircle weight="bold" size={20} />,
-    notification: 2,
-  },
-];
+export type TransactionTab = {
+  waitrep: number;
+  waituser: number;
+  paypend: number;
+  payverif: number;
+  process: number;
+  done: number;
+  canceled: number;
+};
 
-export default function TabsTransaction() {
+export default function TabsTransaction({ token }: { token: string }) {
   const router = useRouter();
+  const { data, isLoading } = useSWR<SuccessResponse<TransactionTab>>({
+    url: "/dashboard/transactions/tabs",
+    method: "GET",
+    token,
+  });
+
+  if (isLoading) {
+    return;
+  }
+
+  const tabTransaction: TabTransactionType[] = [
+    {
+      id: 1,
+      key: "waitrep",
+      label: "Menunggu Balasan",
+      icon: <ClockCountdown weight="bold" size={20} />,
+      notification: data?.data.waitrep as number,
+    },
+    {
+      id: 2,
+      key: "waituser",
+      label: "Menunggu Konfirmasi User",
+      icon: <ClockUser weight="bold" size={20} />,
+      notification: data?.data.waituser as number,
+    },
+    {
+      id: 3,
+      key: "paypend",
+      label: "Belum Bayar",
+      icon: <ClockClockwise weight="bold" size={20} />,
+      notification: data?.data.paypend as number,
+    },
+    {
+      id: 4,
+      key: "payverif",
+      label: "Verifikasi",
+      icon: <SealQuestion weight="bold" size={20} />,
+      notification: data?.data.payverif as number,
+    },
+    {
+      id: 5,
+      key: "process",
+      label: "Diproses",
+      icon: <Money weight="bold" size={20} />,
+      notification: data?.data.process as number,
+    },
+    {
+      id: 6,
+      key: "done",
+      label: "Selesai",
+      icon: <SealCheck weight="bold" size={20} />,
+      notification: data?.data.done as number,
+    },
+    {
+      id: 7,
+      key: "canceled",
+      label: "Dibatalkan",
+      icon: <XCircle weight="bold" size={20} />,
+      notification: data?.data.canceled as number,
+    },
+    {
+      id: 8,
+      key: "search",
+      label: "Cari",
+      icon: <MagnifyingGlass weight="bold" size={20} />,
+      notification: 0,
+    },
+  ];
 
   return (
     <Tabs
@@ -86,7 +115,13 @@ export default function TabsTransaction() {
         tab: "max-w-fit px-0 h-12",
         tabContent: "group-data-[selected=true]:text-[#059669] font-medium",
       }}
-      onSelectionChange={(e) => router.push(`/transactions?status=${e}`)}
+      onSelectionChange={(e) => {
+        if (e == "search") {
+          router.push(`/transactions/search`);
+        } else {
+          router.push(`/transactions?status=${e}`);
+        }
+      }}
     >
       {tabTransaction.map((tab) => (
         <Tab

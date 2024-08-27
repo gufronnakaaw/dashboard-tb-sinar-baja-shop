@@ -1,7 +1,8 @@
 import { TransactionsType } from "@/types/transactions.type";
+import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { Chip } from "@nextui-org/react";
-import { Bag, MapTrifold, SealCheck, Truck } from "@phosphor-icons/react";
+import { Bag, MapPin, SealCheck, Truck } from "@phosphor-icons/react";
 import Link from "next/link";
 
 export default function CardTransaction({ data }: { data: TransactionsType }) {
@@ -36,22 +37,20 @@ export default function CardTransaction({ data }: { data: TransactionsType }) {
           href="/transactions/190720240901"
           className="text-sm font-semibold text-foreground hover:text-emerald-600"
         >
-          Transaksi #190720240901
+          Transaksi {data.transaksi_id}
         </Link>
-        <p className="text-[12px] text-foreground-600">{data.orders_name}</p>
+        <p className="text-[12px] text-foreground-600">{data.nama_penerima}</p>
       </div>
 
-      <div className="text-sm text-foreground">
-        {formatRupiah(data.total_payment)}
-      </div>
+      <div className="text-sm text-foreground">{formatRupiah(data.total)}</div>
 
       <Chip
         variant="flat"
         color="default"
         size="sm"
         startContent={
-          data.delivery == "ambil sendiri" ? (
-            <MapTrifold weight="bold" size={14} />
+          data.type == "pickup" ? (
+            <MapPin weight="bold" size={14} />
           ) : (
             <Truck weight="bold" size={14} />
           )
@@ -62,10 +61,12 @@ export default function CardTransaction({ data }: { data: TransactionsType }) {
           content: "font-medium capitalize",
         }}
       >
-        {data.delivery}
+        {data.type}
       </Chip>
 
-      <div className="text-sm text-foreground">{data.date_order}</div>
+      <div className="text-sm text-foreground">
+        {formatDate(data.created_at)}
+      </div>
     </div>
   );
 }

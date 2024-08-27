@@ -20,7 +20,7 @@ export default function ButtonSidebar({
     <Link
       href={path}
       className={`flex h-10 items-center justify-between rounded-xl px-3 py-2 ${
-        router.pathname.includes(path)
+        router.asPath.includes(path)
           ? "bg-emerald-600 text-white hover:bg-emerald-600/90"
           : "bg-transparent text-foreground-600 hover:bg-foreground-200"
       } ${className}`}
