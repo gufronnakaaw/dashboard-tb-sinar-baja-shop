@@ -34,7 +34,7 @@ export default function CardTransaction({ data }: { data: TransactionsType }) {
 
       <div className="justify-self-start">
         <Link
-          href="/transactions/190720240901"
+          href={`/transactions/${encodeURIComponent(data.transaksi_id)}`}
           className="text-sm font-semibold text-foreground hover:text-emerald-600"
         >
           Transaksi {data.transaksi_id}

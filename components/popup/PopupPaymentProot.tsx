@@ -13,7 +13,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function PopupPaymentProot() {
+export default function PopupPaymentProot({
+  transaksi_id,
+  token,
+}: {
+  transaksi_id: string;
+  token: string;
+}) {
   const [isSelected, setIsSelected] = useState(false);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -75,16 +81,6 @@ export default function PopupPaymentProot() {
                         </span>
                         <h6 className="text-sm font-semibold text-foreground">
                           Mandiri
-                        </h6>
-                      </div>
-
-                      <div>
-                        <span className="mb-1 text-[12px] text-foreground-600">
-                          No. Rekening{" "}
-                          <span className="text-danger-600">*</span>
-                        </span>
-                        <h6 className="text-sm font-semibold text-foreground">
-                          918274710310
                         </h6>
                       </div>
                     </div>

@@ -4,6 +4,10 @@ import PopupShippingCost from "@/components/popup/PopupShippingCost";
 import { TemplateInvoice } from "@/components/template/TemplateInvoice";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
+import { SuccessResponse } from "@/types/global.type";
+import { TransactionDetail } from "@/types/transactions.type";
+import { fetcher } from "@/utils/fetcher";
+import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { Button, Checkbox } from "@nextui-org/react";
 import {
@@ -15,11 +19,15 @@ import {
   Truck,
   XCircle,
 } from "@phosphor-icons/react";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
-export default function TransactionDetailsPage() {
+export default function TransactionDetailsPage({
+  transaction,
+  token,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const router = useRouter();
   const componentRef = useRef(null);
@@ -28,7 +36,7 @@ export default function TransactionDetailsPage() {
   });
 
   return (
-    <Layout title="Details Transaction #190720240901">
+    <Layout title={`Detail Transaksi ${transaction.transaksi_id}`}>
       <Container>
         <section className="mb-16 grid gap-8">
           <div className="flex max-w-[calc(100%-412px)] items-center justify-between gap-2">
@@ -55,7 +63,7 @@ export default function TransactionDetailsPage() {
           </div>
 
           <div className="hidden">
-            <TemplateInvoice ref={componentRef} />
+            <TemplateInvoice ref={componentRef} {...transaction} />
           </div>
 
           <div className="grid min-h-screen grid-cols-[1fr_380px] items-start gap-8">
@@ -66,7 +74,7 @@ export default function TransactionDetailsPage() {
                     ID Pesanan
                   </p>
                   <h5 className="font-semibold text-foreground">
-                    #190720240901
+                    {transaction.transaksi_id}
                   </h5>
                 </div>
 
@@ -75,38 +83,61 @@ export default function TransactionDetailsPage() {
                     Pesanan Dari
                   </p>
                   <h5 className="font-semibold text-foreground">
-                    Fajar Fadillah Agustian
+                    {transaction.nama_penerima}
                   </h5>
                 </div>
+
+                {transaction.type == "pickup" ? (
+                  <div>
+                    <p className="mb-1 text-[12px] text-foreground-600">
+                      No Telepon
+                    </p>
+                    <h5 className="font-semibold text-foreground">
+                      {transaction.no_telpon}
+                    </h5>
+                  </div>
+                ) : null}
 
                 <div>
                   <p className="mb-1 text-[12px] text-foreground-600">
                     Waktu Pemesanan
                   </p>
                   <h5 className="font-semibold leading-tight text-foreground">
-                    3 Agustus 2024,{" "}
-                    <span className="text-[12px]">10:42 WIB</span>
+                    {formatDate(transaction.created_at)}
                   </h5>
                 </div>
               </div>
 
-              <div className="py-6">
-                <h4 className="mb-4 font-semibold text-foreground">
-                  Informasi Pengiriman
-                </h4>
-                <p className="mb-1 text-sm text-foreground">+6289123456789</p>
-                <p className="mb-4 text-sm text-foreground">
-                  Jl. Bukit Raya Persari, Blok. 12B, No.144C RT. 05/RW. 09, Kel.
-                  Limo Kec. Limo, Kota Depok, Jawa Barat
-                </p>
-              </div>
+              {transaction.type == "delivery" ? (
+                <div className="py-6">
+                  <h4 className="mb-4 font-semibold text-foreground">
+                    Informasi Pengiriman
+                  </h4>
+                  <p className="mb-1 text-sm font-semibold text-foreground">
+                    {transaction.nama_penerima}
+                  </p>
+                  <p className="mb-1 text-sm text-foreground">
+                    {transaction.no_telpon}
+                  </p>
+                  <p className="mb-4 text-sm text-foreground">
+                    {transaction.alamat_lengkap},{" "}
+                    <span className="uppercase">
+                      {transaction.kecamatan}, {transaction.kota},{" "}
+                      {transaction.provinsi}, {transaction.kode_pos}
+                    </span>
+                  </p>
+                </div>
+              ) : null}
 
               <div className="grid gap-4 py-6">
                 <h4 className="font-semibold text-foreground">Daftar Produk</h4>
 
                 <div className="grid gap-3">
-                  <CardProductOrder />
-                  <CardProductOrder />
+                  {transaction.products.map((product) => {
+                    return (
+                      <CardProductOrder key={product.kode_item} {...product} />
+                    );
+                  })}
                 </div>
               </div>
 
@@ -115,8 +146,8 @@ export default function TransactionDetailsPage() {
                   <p className="text-sm font-medium text-foreground-600">
                     Metode Pembayaran
                   </p>
-                  <h6 className="text-sm font-semibold text-foreground">
-                    Transfer
+                  <h6 className="text-sm font-semibold capitalize text-foreground">
+                    {transaction.payment.metode}
                   </h6>
                 </div>
 
@@ -125,25 +156,25 @@ export default function TransactionDetailsPage() {
                     Jumlah Item
                   </p>
                   <h6 className="text-sm font-semibold text-foreground">
-                    6 item
+                    {transaction.products.length} item
                   </h6>
                 </div>
 
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium text-foreground-600">
-                    Biaya Pengiriman
+                    Subtotal Produk
                   </p>
                   <h6 className="text-sm font-semibold text-foreground">
-                    {formatRupiah(50000)}
+                    {formatRupiah(transaction.subtotal_produk)}
                   </h6>
                 </div>
 
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium text-foreground-600">
-                    Subtotal
+                    Subtotal Ongkir
                   </p>
                   <h6 className="text-sm font-semibold text-foreground">
-                    {formatRupiah(150000)}
+                    {formatRupiah(transaction.subtotal_ongkir)}
                   </h6>
                 </div>
               </div>
@@ -151,34 +182,41 @@ export default function TransactionDetailsPage() {
               <div className="grid gap-16 pt-6">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium text-foreground-600">
-                    Total Pembayaran
+                    Total
                   </p>
                   <h6 className="text-[22px] font-bold text-foreground">
-                    {formatRupiah(200000)}
+                    {transaction.status == "Menunggu balasan" ||
+                    transaction.status == "Menunggu konfirmasi user"
+                      ? formatRupiah(
+                          transaction.total + transaction.subtotal_ongkir,
+                        )
+                      : formatRupiah(transaction.total)}
                   </h6>
                 </div>
 
-                <div className="grid gap-3">
-                  <Checkbox
-                    color="default"
-                    isSelected={isOrderCompleted}
-                    onValueChange={setIsOrderCompleted}
-                    classNames={{
-                      label: "text-[12px] font-medium text-foreground-600",
-                    }}
-                  >
-                    Saya ingin menyelesaikan pesanan!
-                  </Checkbox>
+                {transaction.status == "Diproses" ? (
+                  <div className="grid gap-3">
+                    <Checkbox
+                      color="default"
+                      isSelected={isOrderCompleted}
+                      onValueChange={setIsOrderCompleted}
+                      classNames={{
+                        label: "text-[12px] font-medium text-foreground-600",
+                      }}
+                    >
+                      Saya ingin menyelesaikan pesanan!
+                    </Checkbox>
 
-                  <Button
-                    isDisabled={isOrderCompleted ? false : true}
-                    variant="solid"
-                    startContent={<Check weight="bold" size={18} />}
-                    className={`font-medium ${isOrderCompleted ? "bg-emerald-600 text-white" : "bg-foreground-200 text-foreground-600"}`}
-                  >
-                    Ya, selesaikan pesanan
-                  </Button>
-                </div>
+                    <Button
+                      isDisabled={isOrderCompleted ? false : true}
+                      variant="solid"
+                      startContent={<Check weight="bold" size={18} />}
+                      className={`font-medium ${isOrderCompleted ? "bg-emerald-600 text-white" : "bg-foreground-200 text-foreground-600"}`}
+                    >
+                      Ya, selesaikan pesanan
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -187,11 +225,11 @@ export default function TransactionDetailsPage() {
                 <div className="grid gap-4">
                   <div>
                     <h4 className="mb-1 text-sm font-semibold text-foreground">
-                      Metode Transaksi
+                      Tipe Transaksi
                     </h4>
 
                     <div className="flex items-center justify-center gap-2 rounded-lg border-[2px] border-foreground-400 bg-foreground-600/20 p-[6px_16px] text-[12px] font-semibold text-foreground-600">
-                      {true ? (
+                      {transaction.type == "delivery" ? (
                         <>
                           <Truck
                             weight="bold"
@@ -215,7 +253,7 @@ export default function TransactionDetailsPage() {
 
                   <div>
                     <h4 className="mb-1 text-sm font-semibold text-foreground">
-                      Status Pembayaran
+                      Status
                     </h4>
 
                     <div className="flex items-center justify-center gap-2 rounded-lg border-[2px] border-amber-400 bg-amber-600/20 p-[6px_16px] text-[12px] font-semibold text-amber-500">
@@ -224,7 +262,7 @@ export default function TransactionDetailsPage() {
                         size={18}
                         className="text-amber-500"
                       />
-                      Belum Dibayar
+                      {transaction.status}
                     </div>
                   </div>
                 </div>
@@ -238,41 +276,70 @@ export default function TransactionDetailsPage() {
                       Pembeli belum melakukan pembayaran sesuai nominal yang
                       tertera.
                     </li>
-                    <li>
-                      Pembeli memilih metode pengiriman <strong>Diantar</strong>
-                      . Harap anda atur biaya pengiriman sesuai dengan jarak
-                      alamat pembeli. Pastikan nominal yang anda masukan benar!
-                    </li>
+                    {transaction.type == "delivery" ? (
+                      <li>
+                        Pembeli memilih metode pengiriman{" "}
+                        <strong>Diantar</strong>. Harap anda atur biaya
+                        pengiriman sesuai dengan jarak alamat pembeli. Pastikan
+                        nominal yang anda masukan benar!
+                      </li>
+                    ) : null}
                   </ol>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-6">
-                <div className="grid gap-2">
-                  <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
-                    Verifikasi Pembayaran{" "}
-                    <XCircle
-                      weight="fill"
-                      size={18}
-                      className="text-danger-600"
+                {transaction.payment.status == "paid" ? (
+                  <div className="grid gap-2">
+                    <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
+                      Verifikasi Pembayaran{" "}
+                      {transaction.payment.url ? (
+                        <Check
+                          weight="fill"
+                          size={18}
+                          className="text-success"
+                        />
+                      ) : (
+                        <XCircle
+                          weight="fill"
+                          size={18}
+                          className="text-danger-600"
+                        />
+                      )}
+                    </h4>
+
+                    <PopupPaymentProot
+                      transaksi_id={transaction.transaksi_id}
+                      token={token}
                     />
-                  </h4>
+                  </div>
+                ) : null}
 
-                  <PopupPaymentProot />
-                </div>
+                {transaction.type == "delivery" ? (
+                  <div className="grid gap-2">
+                    <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
+                      Atur Biaya Pengiriman
+                      {transaction.replied ? (
+                        <Check
+                          weight="fill"
+                          size={18}
+                          className="text-success"
+                        />
+                      ) : (
+                        <XCircle
+                          weight="fill"
+                          size={18}
+                          className="text-danger-600"
+                        />
+                      )}
+                    </h4>
 
-                <div className="grid gap-2">
-                  <h4 className="flex items-center gap-1 text-xs font-semibold text-foreground">
-                    Atur Biaya Pengiriman
-                    <XCircle
-                      weight="fill"
-                      size={18}
-                      className="text-danger-600"
+                    <PopupShippingCost
+                      transaksi_id={transaction.transaksi_id}
+                      token={token}
                     />
-                  </h4>
-
-                  <PopupShippingCost />
-                </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -281,3 +348,23 @@ export default function TransactionDetailsPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = (async ({ req, params }) => {
+  const token = req.headers["access_token"] as string;
+
+  const response: SuccessResponse<TransactionDetail> = await fetcher({
+    url: `/dashboard/transactions/detail/${encodeURIComponent(params?.id as string)}`,
+    method: "GET",
+    token,
+  });
+
+  return {
+    props: {
+      transaction: response.data,
+      token,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  transaction: TransactionDetail;
+  token: string;
+}>;

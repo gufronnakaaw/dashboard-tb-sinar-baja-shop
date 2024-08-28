@@ -1,4 +1,4 @@
-import { formatInputRupiah } from "@/utils/formatInputRupiah";
+import { fetcher } from "@/utils/fetcher";
 import {
   Button,
   Input,
@@ -11,15 +11,37 @@ import {
 } from "@nextui-org/react";
 import { Check } from "@phosphor-icons/react";
 import { useState } from "react";
+import Toast from "react-hot-toast";
 
-export default function PopupShippingCost() {
+export default function PopupShippingCost({
+  transaksi_id,
+  token,
+}: {
+  transaksi_id: string;
+  token: string;
+}) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
-    setValue(formatInputRupiah(rawValue));
-  };
+  async function handleCost() {
+    try {
+      await fetcher({
+        url: "/dashboard/transactions/cost",
+        method: "PATCH",
+        data: {
+          transaksi_id,
+          subtotal_ongkir: parseInt(value),
+        },
+        token,
+      });
+
+      Toast.success("Update ongkir berhasil");
+      window.location.reload();
+    } catch (error) {
+      Toast.error("Update ongkir gagal");
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -52,9 +74,14 @@ export default function PopupShippingCost() {
                   variant="flat"
                   color="default"
                   labelPlacement="outside"
-                  placeholder="Cth: 50.000"
                   value={value}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    if (!e.target.value) {
+                      setValue("");
+                    } else {
+                      setValue(e.target.value);
+                    }
+                  }}
                   startContent={
                     <span className="text-sm font-medium text-foreground-600">
                       Rp
@@ -70,7 +97,10 @@ export default function PopupShippingCost() {
                 <Button
                   color="danger"
                   variant="light"
-                  onPress={onClose}
+                  onPress={() => {
+                    onClose();
+                    setValue("");
+                  }}
                   className="font-medium"
                 >
                   Batal
@@ -80,6 +110,8 @@ export default function PopupShippingCost() {
                   variant="solid"
                   startContent={<Check weight="bold" size={18} />}
                   className="bg-emerald-600 font-medium text-white"
+                  onClick={handleCost}
+                  isDisabled={!value}
                 >
                   Ya, Atur Ongkir
                 </Button>
