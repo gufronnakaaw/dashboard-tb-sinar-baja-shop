@@ -6,7 +6,6 @@ import { SuccessResponse } from "@/types/global.type";
 import { TransactionsType } from "@/types/transactions.type";
 import { Pagination, ScrollShadow } from "@nextui-org/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -25,7 +24,6 @@ export default function TransactionsPage({
     method: "GET",
     token,
   });
-  const router = useRouter();
 
   return (
     <Layout title="Transactions Page">
@@ -45,7 +43,7 @@ export default function TransactionsPage({
               orientation="horizontal"
               className="scrollbar-custom pr-12"
             >
-              <TabsTransaction token={token} />
+              <TabsTransaction token={token} status={status} />
             </ScrollShadow>
 
             {!isLoading ? (
@@ -86,7 +84,7 @@ export const getServerSideProps = (async ({ req, query }) => {
   return {
     props: {
       token: req.headers["access_token"] as string,
-      status,
+      status: status ? status : "waitrep",
     },
   };
 }) satisfies GetServerSideProps<{ token: string; status: string }>;

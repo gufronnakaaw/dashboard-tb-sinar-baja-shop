@@ -22,6 +22,7 @@ import {
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
+import Toast from "react-hot-toast";
 import { useReactToPrint } from "react-to-print";
 
 export default function TransactionDetailsPage({
@@ -34,6 +35,26 @@ export default function TransactionDetailsPage({
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  async function handleDone() {
+    try {
+      await fetcher({
+        url: "/dashboard/transactions/done",
+        method: "PATCH",
+        token,
+        data: {
+          transaksi_id: transaction.transaksi_id,
+          is_done: true,
+        },
+      });
+
+      Toast.success("Update status berhasil");
+      window.location.reload();
+    } catch (error) {
+      Toast.error("Update status gagal");
+      console.log(error);
+    }
+  }
 
   return (
     <Layout title={`Detail Transaksi ${transaction.transaksi_id}`}>
@@ -212,6 +233,7 @@ export default function TransactionDetailsPage({
                       variant="solid"
                       startContent={<Check weight="bold" size={18} />}
                       className={`font-medium ${isOrderCompleted ? "bg-emerald-600 text-white" : "bg-foreground-200 text-foreground-600"}`}
+                      onClick={handleDone}
                     >
                       Ya, selesaikan pesanan
                     </Button>
@@ -267,25 +289,27 @@ export default function TransactionDetailsPage({
                   </div>
                 </div>
 
-                <div className="text-[12px] italic">
-                  <p className="mb-1 font-semibold text-foreground">
-                    Catatan :
-                  </p>
-                  <ol className="list-outside pl-3 font-medium text-foreground-600">
-                    <li>
-                      Pembeli belum melakukan pembayaran sesuai nominal yang
-                      tertera.
-                    </li>
-                    {transaction.type == "delivery" ? (
+                {transaction.status == "Menunggu pembayaran" ? (
+                  <div className="text-[12px] italic">
+                    <p className="mb-1 font-semibold text-foreground">
+                      Catatan :
+                    </p>
+                    <ol className="list-outside pl-3 font-medium text-foreground-600">
                       <li>
-                        Pembeli memilih metode pengiriman{" "}
-                        <strong>Diantar</strong>. Harap anda atur biaya
-                        pengiriman sesuai dengan jarak alamat pembeli. Pastikan
-                        nominal yang anda masukan benar!
+                        Pembeli belum melakukan pembayaran sesuai nominal yang
+                        tertera.
                       </li>
-                    ) : null}
-                  </ol>
-                </div>
+                      {transaction.type == "delivery" ? (
+                        <li>
+                          Pembeli memilih metode pengiriman{" "}
+                          <strong>Diantar</strong>. Harap anda atur biaya
+                          pengiriman sesuai dengan jarak alamat pembeli.
+                          Pastikan nominal yang anda masukan benar!
+                        </li>
+                      ) : null}
+                    </ol>
+                  </div>
+                ) : null}
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-6">
@@ -311,6 +335,7 @@ export default function TransactionDetailsPage({
                     <PopupPaymentProot
                       transaksi_id={transaction.transaksi_id}
                       token={token}
+                      payment={transaction.payment}
                     />
                   </div>
                 ) : null}

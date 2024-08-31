@@ -32,7 +32,13 @@ export type TransactionTab = {
   canceled: number;
 };
 
-export default function TabsTransaction({ token }: { token: string }) {
+export default function TabsTransaction({
+  token,
+  status,
+}: {
+  token: string;
+  status: string;
+}) {
   const router = useRouter();
   const { data, isLoading } = useSWR<SuccessResponse<TransactionTab>>({
     url: "/dashboard/transactions/tabs",
@@ -117,11 +123,12 @@ export default function TabsTransaction({ token }: { token: string }) {
       }}
       onSelectionChange={(e) => {
         if (e == "search") {
-          router.push(`/transactions/search`);
+          router.push(`/transactions/search?status=${e}`);
         } else {
           router.push(`/transactions?status=${e}`);
         }
       }}
+      selectedKey={status}
     >
       {tabTransaction.map((tab) => (
         <Tab

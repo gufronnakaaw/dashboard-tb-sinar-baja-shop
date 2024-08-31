@@ -1,3 +1,5 @@
+import { PaymentDetail } from "@/types/transactions.type";
+import { fetcher } from "@/utils/fetcher";
 import {
   Button,
   Checkbox,
@@ -12,16 +14,39 @@ import { Check } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import Toast from "react-hot-toast";
 
 export default function PopupPaymentProot({
   transaksi_id,
   token,
+  payment,
 }: {
   transaksi_id: string;
   token: string;
+  payment: PaymentDetail;
 }) {
   const [isSelected, setIsSelected] = useState(false);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  async function handleVerification() {
+    try {
+      await fetcher({
+        url: "/dashboard/transactions/verification",
+        method: "PATCH",
+        token,
+        data: {
+          transaksi_id,
+          is_verification: true,
+        },
+      });
+
+      Toast.success("Update status berhasil");
+      window.location.reload();
+    } catch (error) {
+      Toast.error("Update status gagal");
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -50,13 +75,13 @@ export default function PopupPaymentProot({
               <ModalBody>
                 <div className="grid gap-6">
                   <Link
-                    href="/img/struk-pembayaran.jpg"
+                    href={payment.url ? payment.url : ""}
                     target="_blank"
                     className="flex aspect-square h-auto w-full items-center justify-center overflow-hidden rounded-xl border-[2px] border-dashed border-foreground-400"
                   >
                     <Image
                       priority
-                      src="/img/struk-pembayaran.jpg"
+                      src={payment.url ? payment.url : ""}
                       alt="receipt img"
                       width={500}
                       height={500}
@@ -68,19 +93,19 @@ export default function PopupPaymentProot({
                     <div className="grid grid-cols-2 grid-rows-2 gap-1">
                       <div className="col-span-2">
                         <span className="mb-1 text-[12px] text-foreground-600">
-                          Nama <span className="text-danger-600">*</span>
+                          Nama
                         </span>
                         <h6 className="text-sm font-semibold text-foreground">
-                          Fajar Fadillah Agustian
+                          {payment.nama}
                         </h6>
                       </div>
 
                       <div>
                         <span className="mb-1 text-[12px] text-foreground-600">
-                          Bank <span className="text-danger-600">*</span>
+                          Bank
                         </span>
                         <h6 className="text-sm font-semibold text-foreground">
-                          Mandiri
+                          {payment.dari}
                         </h6>
                       </div>
                     </div>
@@ -114,6 +139,7 @@ export default function PopupPaymentProot({
                   variant="solid"
                   startContent={<Check weight="bold" size={18} />}
                   className={`font-medium ${isSelected ? "bg-emerald-600 text-white" : "bg-foreground-200 text-foreground-600"}`}
+                  onClick={handleVerification}
                 >
                   Ya, Verifikasi
                 </Button>
