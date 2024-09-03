@@ -1,9 +1,21 @@
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
-import { TimeInput } from "@nextui-org/react";
-import { Clock } from "@phosphor-icons/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Clock, FloppyDisk } from "@phosphor-icons/react";
 
 export default function OperationalPage() {
+  const generateTimeOptions = (name: string) => {
+    const options = [];
+    for (let i = 0; i <= 23; i++) {
+      const hour = i < 10 ? `0${i}` : `${i}`;
+      const time = `${hour}:00`;
+
+      options.push({ label: time, value: time });
+    }
+
+    return options;
+  };
+
   return (
     <Layout title="Operational Page">
       <Container>
@@ -28,115 +40,291 @@ export default function OperationalPage() {
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Senin</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("senin")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("senin")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
 
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Selasa</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("selesa")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("selasa")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
 
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Rabu</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("rabu")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("rabu")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
 
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Kamis</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("kamis")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("kamis")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
 
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Jum'at</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("jumat")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("jumat")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
 
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Sabtu</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("sabtu")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("sabtu")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
 
               <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-6 text-sm text-foreground">
                 <h4>Minggu</h4>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("minggu")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam buka"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
 
-                <TimeInput
-                  label={null}
+                <Select
+                  aria-label="select time operational"
+                  items={generateTimeOptions("minggu")}
                   labelPlacement="outside"
-                  startContent={<Clock weight="bold" size={20} />}
-                />
+                  placeholder="Pilih jam tutup"
+                  startContent={
+                    <Clock
+                      weight="bold"
+                      size={20}
+                      className="text-foreground-400"
+                    />
+                  }
+                >
+                  {(item) => (
+                    <SelectItem key={item.value}>{item.label}</SelectItem>
+                  )}
+                </Select>
               </div>
             </div>
+
+            <Button
+              variant="solid"
+              startContent={<FloppyDisk weight="bold" size={20} />}
+              className="mt-4 w-max justify-self-end bg-emerald-600 font-semibold text-white"
+            >
+              Simpan Perubahan
+            </Button>
           </div>
         </section>
       </Container>
