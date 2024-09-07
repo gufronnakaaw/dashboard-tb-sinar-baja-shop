@@ -60,7 +60,7 @@ export default function TransactionsPage({
                     showControls
                     page={page}
                     total={Math.ceil(
-                      ((data?.data.total as number) / 5) as number,
+                      ((data?.data.total as number) / 10) as number,
                     )}
                     onChange={setPage}
                     className="justify-self-center"

@@ -34,6 +34,7 @@ export default function SearchPage({
       router.push({
         query: {
           status: "search",
+          q,
         },
       });
     }
