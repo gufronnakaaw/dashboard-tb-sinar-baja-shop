@@ -16,7 +16,6 @@ export default function ButtonSidebar({
 }: ButtonSidebarProps) {
   const router = useRouter();
 
-  console.log(router.asPath);
   return (
     <Link
       href={path}
