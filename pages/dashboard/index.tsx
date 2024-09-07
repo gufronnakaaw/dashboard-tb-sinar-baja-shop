@@ -70,60 +70,82 @@ export default function DashboardPage({
             </p>
           </div>
 
-          <div className="grid gap-6 rounded-xl border-[2px] border-foreground-200 px-16 py-6">
+          <div className="grid gap-6 rounded-xl border-[2px] border-foreground-200 px-16 py-8">
             <h4 className="font-semibold text-foreground">Ringkasan Pesanan</h4>
 
             <div className="grid grid-cols-2 divide-x-2 divide-foreground-200">
-              <div className="grid gap-1 pr-24">
-                <p className="text-sm font-medium text-foreground-600">
-                  Pesanan Baru
-                </p>
-                <h6 className="text-[32px] font-semibold text-foreground">
-                  {data?.data.transactions.amount}
-                </h6>
-                <p className="text-sm font-medium text-foreground-600">
-                  Potensi Pendapatan{" "}
-                  <span className="font-semibold text-emerald-600">
-                    {formatRupiah(data?.data.transactions.total as number)}
-                  </span>
-                </p>
-                <Link
-                  href="/transactions?sort=newest"
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("dalam proses pengembangan");
-                  }}
-                >
-                  Lihat Detail
-                  <ArrowRight weight="bold" size={14} />
-                </Link>
+              <div className="grid divide-y-2 pr-24">
+                <div className="grid gap-1 pb-8">
+                  <p className="text-sm font-medium text-foreground-600">
+                    Pesanan Baru
+                  </p>
+                  <h6 className="text-[32px] font-semibold text-foreground">
+                    {data?.data.transactions.amount}
+                  </h6>
+                  <p className="text-sm font-medium text-foreground-600">
+                    Potensi Pendapatan{" "}
+                    <span className="font-semibold text-emerald-600">
+                      {formatRupiah(data?.data.transactions.total as number)}
+                    </span>
+                  </p>
+                  <Link
+                    href="/transactions?sort=newest"
+                    className="mt-4 inline-flex w-max items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-400"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      alert("dalam proses pengembangan");
+                    }}
+                  >
+                    Lihat Detail
+                    <ArrowRight weight="bold" size={14} />
+                  </Link>
+                </div>
+
+                <div className="grid gap-1 pt-8">
+                  <p className="text-sm font-medium text-foreground-600">
+                    Transaksi Selesai
+                  </p>
+                  <h6 className="text-[32px] font-semibold text-foreground">
+                    286
+                  </h6>
+                </div>
               </div>
 
-              <div className="grid gap-1 pl-24">
-                <p className="text-sm font-medium text-foreground-600">
-                  Pengiriman Diantar
-                </p>
-                <h6 className="text-[32px] font-semibold text-foreground">
-                  {data?.data.delivery.amount}
-                </h6>
-                <p className="text-sm font-medium text-foreground-600">
-                  Potensi Pendapatan{" "}
-                  <span className="font-semibold text-emerald-600">
-                    {formatRupiah(data?.data.delivery.total as number)}
-                  </span>
-                </p>
-                <Link
-                  href="/transactions?shipment=delivered"
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("dalam proses pengembangan");
-                  }}
-                >
-                  Lihat Detail
-                  <ArrowRight weight="bold" size={14} />
-                </Link>
+              <div className="grid divide-y-2 pl-24">
+                <div className="grid gap-1 pb-8">
+                  <p className="text-sm font-medium text-foreground-600">
+                    Pengiriman Diantar
+                  </p>
+                  <h6 className="text-[32px] font-semibold text-foreground">
+                    {data?.data.delivery.amount}
+                  </h6>
+                  <p className="text-sm font-medium text-foreground-600">
+                    Potensi Pendapatan{" "}
+                    <span className="font-semibold text-emerald-600">
+                      {formatRupiah(data?.data.delivery.total as number)}
+                    </span>
+                  </p>
+                  <Link
+                    href="/transactions?shipment=delivered"
+                    className="mt-4 inline-flex w-max items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-400"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      alert("dalam proses pengembangan");
+                    }}
+                  >
+                    Lihat Detail
+                    <ArrowRight weight="bold" size={14} />
+                  </Link>
+                </div>
+
+                <div className="grid gap-1 pt-8">
+                  <p className="text-sm font-medium text-foreground-600">
+                    Total Pendapatan
+                  </p>
+                  <h6 className="text-[32px] font-semibold text-foreground">
+                    {formatRupiah(298716201)}
+                  </h6>
+                </div>
               </div>
             </div>
           </div>
