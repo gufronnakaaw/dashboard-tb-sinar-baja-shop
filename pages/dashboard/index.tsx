@@ -25,6 +25,8 @@ export default function DashboardPage({
         amount: number;
         total: number;
       };
+      done_transaction: number;
+      total_done_transaction: number;
     }>
   >(
     { url: "/dashboard", method: "GET", token },
@@ -106,7 +108,7 @@ export default function DashboardPage({
                     Transaksi Selesai
                   </p>
                   <h6 className="text-[32px] font-semibold text-foreground">
-                    286
+                    {data?.data.done_transaction}
                   </h6>
                 </div>
               </div>
@@ -143,7 +145,7 @@ export default function DashboardPage({
                     Total Pendapatan
                   </p>
                   <h6 className="text-[32px] font-semibold text-foreground">
-                    {formatRupiah(298716201)}
+                    {formatRupiah(data?.data.total_done_transaction as number)}
                   </h6>
                 </div>
               </div>

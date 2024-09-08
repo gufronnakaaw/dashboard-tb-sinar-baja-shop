@@ -34,7 +34,7 @@ export default function TransactionsPage({
               Atur transaksi kamu 💸
             </h1>
             <p className="text-foreground-600">
-              Pantau semua transakti yang masuk disini.
+              Pantau semua transaksi yang masuk di sini.
             </p>
           </div>
 
