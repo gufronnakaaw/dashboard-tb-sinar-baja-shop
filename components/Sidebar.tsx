@@ -46,7 +46,8 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
       if (
         router.pathname.startsWith("/settings") &&
-        (router.pathname.includes("/settings/operational") ||
+        (router.pathname.includes("/settings/users") ||
+          router.pathname.includes("/settings/operational") ||
           router.pathname.includes("/settings/banks") ||
           router.pathname.includes("/settings/operators") ||
           router.pathname.includes("/settings/api"))
@@ -134,6 +135,13 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
               }
               className="grid gap-1"
             >
+              <ButtonSidebar
+                label="Users"
+                path="/settings/users"
+                icon={<Circle weight="fill" size={6} />}
+                className="mx-4"
+              />
+
               <ButtonSidebar
                 label="Operasional"
                 path="/settings/operational"
