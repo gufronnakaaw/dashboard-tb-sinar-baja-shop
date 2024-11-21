@@ -1,3 +1,4 @@
+import LoadingSync from "@/components/LoadingSync";
 import CustomTooltip from "@/components/Tooltip";
 import Container from "@/components/wrapper/Container";
 import Layout from "@/components/wrapper/Layout";
@@ -7,6 +8,7 @@ import { customStyleTable } from "@/utils/customStyleTable";
 import { fetcher } from "@/utils/fetcher";
 import { formatDate } from "@/utils/formatDate";
 import { formatRupiah } from "@/utils/formatRupiah";
+
 import {
   Button,
   Input,
@@ -44,6 +46,7 @@ export default function ProductsPage({
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [searchValue] = useDebounce(search, 1000);
+  const [loadingSync, setLoadingSync] = useState(false);
 
   const url = q
     ? `/dashboard/products/search?q=${q}&page=${page}`
@@ -237,6 +240,28 @@ export default function ProductsPage({
     }
   }
 
+  async function handleSyncProducts() {
+    setLoadingSync(true);
+
+    try {
+      await fetcher({
+        url: "/dashboard/sync/products",
+        method: "POST",
+        token,
+      });
+
+      Toast.success("Sinkron produk berhasil");
+      mutate();
+      setLoadingSync(false);
+    } catch (error) {
+      setLoadingSync(false);
+      Toast.error("Sinkron produk gagal. Internet POS tidak memadai.", {
+        duration: 10000,
+      });
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if (searchValue) {
       setPage(1);
@@ -258,6 +283,8 @@ export default function ProductsPage({
   return (
     <Layout title="Products Page">
       <Container>
+        {loadingSync ? <LoadingSync /> : null}
+
         <section className="grid gap-8">
           <div className="flex items-end justify-between gap-2">
             <div className="grid gap-0.5">
@@ -284,6 +311,7 @@ export default function ProductsPage({
                   <ArrowsCounterClockwise weight="bold" size={16} />
                 }
                 className="bg-emerald-600 font-medium text-white"
+                onClick={handleSyncProducts}
               >
                 Sinkron Produk
               </Button>
